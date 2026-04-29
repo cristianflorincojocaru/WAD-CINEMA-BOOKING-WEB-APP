@@ -1,0 +1,91 @@
+@model IEnumerable<cinemawebapp.Models.Promotion>
+
+@{
+    ViewData["Title"] = "Promotions";
+}
+
+@section Styles {
+<style>
+    .promo-card {
+        background-color: #0f0f0f;
+        border: 1px solid #1e1e1e;
+        border-radius: 12px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+        height: 100%;
+    }
+    .promo-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+        border-color: #8B1A1A;
+    }
+    .promo-card-inner {
+        padding: 40px 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        height: 100%;
+    }
+    .promo-emoji { font-size: 32px; margin-bottom: 20px; display: block; }
+    .promo-title { font-size: 12px; font-weight: bold; letter-spacing: 3px; text-transform: uppercase; color: white; margin-bottom: 16px; }
+    .promo-divider { width: 30px; height: 1px; background-color: #8B1A1A; margin: 0 auto 16px auto; }
+    .promo-desc { font-size: 13px; color: #aaa; line-height: 1.8; letter-spacing: 0.5px; margin: 0; }
+    .btn-manage {
+        background: linear-gradient(135deg, #B20000, #8B0000);
+        border: none; color: white; font-weight: 900;
+        letter-spacing: 3px; padding: 8px 22px; font-size: 11px;
+        border-radius: 6px; text-transform: uppercase; text-decoration: none;
+        box-shadow: 0 6px 15px rgba(178,0,0,0.5);
+        transition: all 0.4s ease; display: inline-block;
+        text-align: center;
+    }
+    .btn-manage:hover {
+        background: linear-gradient(135deg, #CC0000, #990000);
+        box-shadow: 0 8px 28px rgba(204,0,0,0.7);
+        transform: scale(1.05); color: white;
+    }
+    .section-divider {
+        height: 1px;
+        background: linear-gradient(to right, transparent, #2a2a2a, transparent);
+        border: none; margin: 0 0 50px 0;
+    }
+</style>
+}
+
+<div class="container mt-5 mb-5">
+
+    <h1 class="mb-2 fw-bold text-uppercase text-center" style="letter-spacing:4px;">Promotions</h1>
+    <p class="text-center mb-5" style="color:#aaa; font-size:12px; letter-spacing:3px; text-transform:uppercase;">Current offers — updated weekly</p>
+
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <div class="text-end mb-3">
+           @if (User.IsInRole("Admin"))
+{
+    <a href="/Promotions" class="btn-manage">⚙ Manage</a>
+}
+        </div>
+    }
+
+    <hr class="section-divider">
+
+    <div class="row justify-content-center g-4">
+        @foreach (var promo in Model)
+        {
+            <div class="col-md-4">
+                <a href="/Home/PromoDetails/@promo.Id" class="text-decoration-none">
+                    <div class="promo-card">
+                        <div class="promo-card-inner">
+                            <span class="promo-emoji">@promo.Emoji</span>
+                            <div class="promo-title">@promo.Title</div>
+                            <div class="promo-divider"></div>
+                            <p class="promo-desc">@promo.Description</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>

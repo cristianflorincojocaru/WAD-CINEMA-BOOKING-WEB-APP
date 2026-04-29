@@ -1,0 +1,196 @@
+@model cinemawebapp.Models.Movie
+
+@{
+    ViewData["Title"] = "Movie Details";
+}
+
+@section Styles {
+    <style>
+        .movie-poster {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #1e1e1e;
+            display: block;
+        }
+        .movie-info-panel { padding-left: 40px; }
+        .movie-tag {
+            display: inline-block;
+            font-size: 10px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #8B1A1A;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+        .movie-title {
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: white;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        .movie-description {
+            font-size: 14px;
+            color: #aaa;
+            line-height: 2;
+            letter-spacing: 0.5px;
+            margin-bottom: 32px;
+            border-left: 2px solid #8B1A1A;
+            padding-left: 20px;
+        }
+        .movie-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            margin-bottom: 36px;
+            border: 1px solid #1e1e1e;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .meta-item {
+            padding: 16px 20px;
+            border-bottom: 1px solid #1e1e1e;
+            border-right: 1px solid #1e1e1e;
+        }
+        .meta-item:nth-child(even) { border-right: none; }
+        .meta-item:nth-last-child(-n+2) { border-bottom: none; }
+        .meta-label {
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #555;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+        .meta-value {
+            font-size: 13px;
+            color: #ccc;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+        .btn-buy-tickets {
+            display: inline-block;
+            padding: 14px 40px;
+            background-color: #8B1A1A;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+            border: none;
+        }
+        .btn-buy-tickets:hover { background-color: #6e1414; color: white; }
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #2a2a2a, transparent);
+            border: none;
+            margin: 60px 0 40px 0;
+        }
+        .trailer-label {
+            font-size: 10px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #8B1A1A;
+            font-weight: bold;
+            margin-bottom: 16px;
+            display: block;
+        }
+        .trailer-title {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: white;
+            margin-bottom: 24px;
+        }
+        .trailer-wrapper {
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #1e1e1e;
+        }
+        .no-trailer {
+            background-color: #0f0f0f;
+            border: 1px solid #1e1e1e;
+            border-radius: 12px;
+            padding: 60px;
+            text-align: center;
+            color: #333;
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+    </style>
+}
+
+<div class="container mt-5">
+    <div class="row align-items-start">
+
+        <!-- POSTER -->
+        <div class="col-md-4">
+            <img src="@Model.ImagePath" class="movie-poster" alt="@Model.Title">
+        </div>
+
+        <!-- INFO -->
+        <div class="col-md-8">
+            <div class="movie-info-panel">
+
+                <span class="movie-tag">@(Model.IsUpcoming ? "Coming Soon" : "Now in Theaters")</span>
+                <div class="movie-title">@Model.Title</div>
+
+                <p class="movie-description">@Model.Description</p>
+
+                <div class="movie-meta">
+                    <div class="meta-item">
+                        <div class="meta-label">Genre</div>
+                        <div class="meta-value">@Model.Genre</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Duration</div>
+                        <div class="meta-value">@Model.DurationMinutes minutes</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Age Rating</div>
+                        <div class="meta-value">@Model.AgeRating</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Director</div>
+                        <div class="meta-value">@Model.Director</div>
+                    </div>
+                </div>
+
+                <a href="/Home/Tickets" class="btn-buy-tickets">Buy Tickets</a>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- TRAILER -->
+<div class="container mb-5">
+    <span class="trailer-label">Official Trailer</span>
+    <div class="trailer-title">Watch the Trailer</div>
+
+    @if (!string.IsNullOrEmpty(Model.TrailerUrl))
+    {
+        <div class="trailer-wrapper">
+            <div class="ratio ratio-16x9">
+                <iframe src="@Model.TrailerUrl"
+                        title="@Model.Title Trailer"
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="no-trailer">[ Trailer not available ]</div>
+    }
+</div>

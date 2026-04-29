@@ -1,0 +1,198 @@
+@model cinemawebapp.Models.Promotion
+
+@{
+    ViewData["Title"] = "Edit Promotion";
+}
+
+@section Styles {
+<style>
+    .page-header { text-align: center; padding: 60px 0 40px; }
+    .page-header h1 { font-size: 36px; font-weight: 700; letter-spacing: 6px; text-transform: uppercase; color: white; margin-bottom: 8px; }
+    .page-header p { font-size: 12px; letter-spacing: 4px; text-transform: uppercase; color: #aaa; }
+    .section-divider { height: 1px; background: linear-gradient(to right, transparent, #2a2a2a, transparent); border: none; margin: 0 0 40px 0; }
+
+    .form-card {
+        background: #0c0c0c;
+        border: 1px solid #1e1e1e;
+        border-radius: 14px;
+        padding: 40px;
+        max-width: 680px;
+        margin: 0 auto;
+    }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .form-full  { margin-bottom: 16px; }
+
+    .field-float {
+        position: relative;
+        background: #141414;
+        border: 1px solid #222;
+        border-radius: 10px;
+        padding: 22px 20px 10px;
+        transition: border-color 0.35s ease, box-shadow 0.35s ease;
+        overflow: hidden;
+    }
+    .field-float::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 50%;
+        height: 2px; width: 0;
+        background: linear-gradient(to right, #7a0000, #ff3333, #7a0000);
+        transform: translateX(-50%);
+        transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 2px;
+    }
+    .field-float:focus-within { border-color: #2a2a2a; box-shadow: 0 8px 30px rgba(178,0,0,0.1); }
+    .field-float:focus-within::after { width: 100%; }
+
+    .field-float label {
+        position: absolute;
+        top: 50%; left: 20px;
+        transform: translateY(-50%);
+        font-size: 11px; font-weight: 700;
+        letter-spacing: 3px; text-transform: uppercase;
+        color: #555; pointer-events: none;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        margin: 0;
+    }
+    .field-float:focus-within label,
+    .field-float.has-value label {
+        top: 13px; transform: translateY(0);
+        font-size: 8px; letter-spacing: 4px; color: #8B1A1A;
+    }
+    .field-float input,
+    .field-float textarea {
+        background: transparent !important;
+        color: white !important;
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+        width: 100%;
+        font-size: 13px; font-weight: 600;
+        letter-spacing: 1px;
+        padding: 0; margin-top: 4px;
+        font-family: inherit;
+        resize: none;
+    }
+    .field-float textarea { min-height: 60px; }
+
+    .field-check {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: #141414;
+        border: 1px solid #222;
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin-bottom: 16px;
+        cursor: pointer;
+        transition: border-color 0.25s;
+    }
+    .field-check:hover { border-color: #2a2a2a; }
+    .field-check input[type="checkbox"] { width: 18px; height: 18px; accent-color: #B20000; cursor: pointer; flex-shrink: 0; }
+    .field-check span { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #aaa; }
+
+    .validation-msg { font-size: 11px; color: #cc2222; letter-spacing: 1px; margin-top: 4px; display: block; }
+
+    .btn-save {
+    background: linear-gradient(135deg, #B20000, #8B0000);
+    color: white; font-size: 11px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    padding: 14px 36px; border-radius: 6px; border: none; cursor: pointer;
+    transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(178,0,0,0.4);
+}
+.btn-save:hover { background: linear-gradient(135deg, #CC0000, #990000); transform: scale(1.05); }
+.btn-back {
+    position: relative; overflow: hidden;
+    background: transparent; border: 1px solid #2a2a2a; color: #aaa;
+    font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    padding: 14px 36px; border-radius: 6px; text-decoration: none;
+    display: inline-block; transition: color 0.3s, border-color 0.3s;
+}
+.btn-back::before { content: ''; position: absolute; inset: 0; background: #1e1e1e; transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease; z-index: 0; }
+.btn-back:hover::before { transform: scaleX(1); }
+.btn-back:hover { color: white; border-color: #3a3a3a; }
+.btn-back span { position: relative; z-index: 1; }
+.form-actions { display: flex; gap: 12px; align-items: center; margin-top: 10px; }
+</style>
+}
+
+<div class="container">
+    <div class="page-header">
+        <h1>Edit Promotion</h1>
+        <p>Database — Promotion #@Model.Id</p>
+    </div>
+
+    <hr class="section-divider">
+
+    <div class="form-card">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="validation-msg mb-3"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-grid">
+                <div class="field-float has-value" id="ff-title">
+                    <label asp-for="Title">Title</label>
+                    <input asp-for="Title" oninput="setVal('ff-title',this)" />
+                    <span asp-validation-for="Title" class="validation-msg"></span>
+                </div>
+                <div class="field-float has-value" id="ff-emoji">
+                    <label asp-for="Emoji">Emoji</label>
+                    <input asp-for="Emoji" oninput="setVal('ff-emoji',this)" />
+                    <span asp-validation-for="Emoji" class="validation-msg"></span>
+                </div>
+            </div>
+
+            <div class="form-full">
+                <div class="field-float has-value" id="ff-desc">
+                    <label asp-for="Description">Description</label>
+                    <textarea asp-for="Description" oninput="setVal('ff-desc',this)"></textarea>
+                    <span asp-validation-for="Description" class="validation-msg"></span>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="field-float has-value" id="ff-discount">
+                    <label asp-for="DiscountPercent">Discount %</label>
+                    <input asp-for="DiscountPercent" type="number" min="0" max="100" step="0.01" oninput="setVal('ff-discount',this)" />
+                    <span asp-validation-for="DiscountPercent" class="validation-msg"></span>
+                </div>
+                <div class="field-float has-value" id="ff-from">
+                    <label asp-for="ValidFrom">Valid From</label>
+                    <input asp-for="ValidFrom" type="date" oninput="setVal('ff-from',this)" />
+                    <span asp-validation-for="ValidFrom" class="validation-msg"></span>
+                </div>
+            </div>
+
+            <div class="form-full">
+                <div class="field-float has-value" id="ff-until">
+                    <label asp-for="ValidUntil">Valid Until</label>
+                    <input asp-for="ValidUntil" type="date" oninput="setVal('ff-until',this)" />
+                    <span asp-validation-for="ValidUntil" class="validation-msg"></span>
+                </div>
+            </div>
+
+            <label class="field-check">
+                <input asp-for="IsActive" type="checkbox" />
+                <span>Active — visible to users</span>
+            </label>
+
+            <div class="form-actions">
+    <button type="submit" class="btn-save">Save Changes</button>
+    <a asp-action="Index" class="btn-back"><span>← Back to List</span></a>
+</div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function setVal(id, el) {
+            document.getElementById(id).classList.toggle('has-value', !!el.value);
+        }
+        document.querySelectorAll('.field-float input, .field-float textarea').forEach(el => {
+            if (el.value) el.closest('.field-float').classList.add('has-value');
+        });
+    </script>
+}

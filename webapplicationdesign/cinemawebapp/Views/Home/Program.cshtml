@@ -1,0 +1,325 @@
+@model IEnumerable<cinemawebapp.Models.Screening>
+@{
+    ViewData["Title"] = "Schedule";
+    var cinemas  = ViewBag.Cinemas  as IEnumerable<cinemawebapp.Models.Cinema> ?? Enumerable.Empty<cinemawebapp.Models.Cinema>();
+    var selCinId = (int?)ViewBag.SelectedCinemaId;
+    var selDay   = (string)(ViewBag.SelectedDay ?? "MON");
+    var bought   = (string?)ViewBag.Bought;
+    var dayNames = new[] { "MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN" };
+}
+
+@section Styles {
+<style>
+/* ── CINEMA TABS ── */
+.cinema-tab {
+    position: relative;
+    background: #0a0a0a;
+    border: 1px solid #2a2a2a;
+    color: #666;
+    padding: 10px 22px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 900;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: color 0.35s ease, border-color 0.35s ease, transform 0.3s ease;
+    width: 100%;
+}
+.cinema-tab::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #B20000, #7a0000);
+    transform: translateX(-101%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 0;
+}
+.cinema-tab span { position: relative; z-index: 1; display: block; text-align: center; width: 100%; }
+.cinema-tab:hover { color: white; border-color: #B20000; transform: translateY(-2px); }
+.cinema-tab:hover::before { transform: translateX(0); }
+.cinema-tab.active {
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 20px rgba(178,0,0,0.45);
+    border-bottom: 2px solid #ff3333;
+}
+.cinema-tab.active::before { transform: translateX(0); }
+.cinema-tab.active::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -75%;
+    width: 50%; height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.18), rgba(255,255,255,0));
+    transform: skewX(-20deg);
+    animation: shimmer 3s infinite;
+    z-index: 1;
+}
+
+/* ── DAY BUTTONS ── */
+.day-btn {
+    position: relative;
+    background: #0a0a0a;
+    border: 1px solid #2a2a2a;
+    color: #666;
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    font-weight: 900;
+    font-size: 11px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    overflow: hidden;
+    transition: color 0.35s ease, border-color 0.35s ease, transform 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.day-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #B20000, #7a0000);
+    transform: scale(0);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 0;
+}
+.day-btn span { position: relative; z-index: 1; }
+.day-btn:hover { color: white; border-color: #B20000; transform: translateY(-2px); }
+.day-btn:hover::before { transform: scale(1); }
+.day-btn.active {
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 18px rgba(178,0,0,0.5);
+}
+.day-btn.active::before { transform: scale(1); }
+.day-btn.active::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -75%;
+    width: 50%; height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.18), rgba(255,255,255,0));
+    transform: skewX(-20deg);
+    animation: shimmer 3s infinite;
+    z-index: 1;
+}
+
+@@keyframes shimmer {
+    0%   { left: -75%; }
+    60%  { left: 125%; }
+    100% { left: 125%; }
+}
+
+/* ── TABLE ── */
+.schedule-table { width: 100%; border-collapse: collapse; }
+.schedule-table thead tr { background-color: #0d0d0d; border-bottom: 1px solid #8B1A1A; }
+.schedule-table thead th {
+    color: #8B1A1A;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 14px 20px;
+    font-weight: bold;
+}
+.schedule-table tbody tr { border-bottom: 1px solid #1a1a1a; transition: background-color 0.2s; }
+.schedule-table tbody tr:hover { background-color: #1a1a1a; }
+.schedule-table tbody td { padding: 14px 20px; color: #ccc; font-size: 14px; }
+.schedule-table tbody td:first-child { color: white; font-weight: bold; letter-spacing: 1px; }
+.schedule-table tbody td:nth-child(2) { color: #aaa; font-size: 13px; letter-spacing: 2px; }
+.schedule-table tbody td:nth-child(3) { color: #aaa; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+
+.btn-buy {
+    position: relative;
+    background: linear-gradient(135deg, #B20000, #8B0000);
+    border: none;
+    color: white;
+    font-weight: 900;
+    letter-spacing: 2px;
+    padding: 6px 20px;
+    font-size: 11px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    box-shadow: 0 6px 15px rgba(178,0,0,0.5);
+    transition: all 0.4s ease;
+    overflow: hidden;
+    cursor: pointer;
+}
+.btn-buy:hover {
+    background: linear-gradient(135deg, #CC0000, #990000);
+    box-shadow: 0 8px 28px rgba(204,0,0,0.7);
+    transform: scale(1.08);
+    color: white;
+}
+
+.btn-manage {
+    position: relative;
+    background: linear-gradient(135deg, #B20000, #8B0000);
+    border: none;
+    color: white;
+    font-weight: 900;
+    letter-spacing: 3px;
+    padding: 8px 22px;
+    font-size: 11px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: 0 6px 15px rgba(178,0,0,0.5);
+    transition: all 0.4s ease;
+    display: inline-block;
+}
+.btn-manage:hover {
+    background: linear-gradient(135deg, #CC0000, #990000);
+    box-shadow: 0 8px 28px rgba(204,0,0,0.7);
+    transform: scale(1.05);
+    color: white;
+}
+
+.section-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #2a2a2a, transparent);
+    border: none;
+    margin: 10px 0 30px 0;
+}
+
+.cinema-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    max-width: 780px;
+    margin: 0 auto;
+}
+
+/* ── TOAST ── */
+.toast-success {
+    position: fixed;
+    bottom: 30px; right: 30px;
+    background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
+    border: 1px solid #B20000;
+    border-left: 4px solid #B20000;
+    color: white;
+    padding: 16px 24px;
+    border-radius: 10px;
+    font-size: 13px;
+    letter-spacing: 1px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    z-index: 9999;
+    animation: slideIn 0.4s ease, fadeOut 0.5s ease 3s forwards;
+}
+@@keyframes slideIn { from { transform: translateX(120%); opacity:0; } to { transform: translateX(0); opacity:1; } }
+@@keyframes fadeOut  { to   { opacity: 0; transform: translateX(120%); } }
+
+.empty-msg {
+    text-align: center;
+    color: #444;
+    padding: 50px 20px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+</style>
+}
+
+@* ── TOAST ── *@
+@if (bought != null)
+{
+    <div class="toast-success">✔ @bought</div>
+}
+
+<div class="container mt-5 mb-5">
+    <h1 class="mb-2 fw-bold text-uppercase text-center" style="letter-spacing:4px;">Movie Schedule</h1>
+    <p class="text-center mb-5" style="color:#aaa; font-size:12px; letter-spacing:3px; text-transform:uppercase;">Select a cinema and a day</p>
+
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <div class="text-end mb-3">
+            @if (User.IsInRole("Admin"))
+{
+    <a href="/Screenings" class="btn-manage">⚙ Manage</a>
+}
+        </div>
+    }
+
+    <!-- CINEMA TABS -->
+    <div class="cinema-grid mb-4">
+        @foreach (var cinema in cinemas)
+        {
+            var isActive = cinema.Id == selCinId ? "active" : "";
+            <a href="@Url.Action("Program", "Home", new { cinemaId = cinema.Id, day = selDay })"
+               class="cinema-tab @isActive" style="text-decoration:none;">
+                <span>@cinema.Name</span>
+            </a>
+        }
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- DAY BUTTONS -->
+    <div class="d-flex justify-content-center gap-3 mb-5">
+        @foreach (var d in dayNames)
+        {
+            var isActive = d == selDay ? "active" : "";
+            <a href="@Url.Action("Program", "Home", new { cinemaId = selCinId, day = d })"
+               class="day-btn @isActive">
+                <span>@d</span>
+            </a>
+        }
+    </div>
+
+    <!-- SCHEDULE TABLE -->
+    <div style="background-color:#0f0f0f; border-radius:12px; border:1px solid #1e1e1e; overflow:hidden;">
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>Movie</th>
+                    <th>Time</th>
+                    <th>Hall</th>
+                    <th>Tickets</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="4" class="empty-msg">No screenings scheduled for this day.</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var s in Model)
+                    {
+                        <tr>
+                            <td>@s.Movie.Title</td>
+                            <td>@s.StartTime.ToString("HH:mm")</td>
+                            <td>@s.Hall.Name</td>
+                            <td>
+                                @if (User.Identity?.IsAuthenticated == true)
+                                {
+                                    <a href="@Url.Action("Tickets", "Home", new { screeningId = s.Id })"
+                                       class="btn-buy" style="text-decoration:none;">BUY</a>
+                                }
+                                else
+                                {
+                                    <a href="/Identity/Account/Login?returnUrl=@Uri.EscapeDataString(Url.Action("Tickets", "Home", new { screeningId = s.Id })!)"
+                                       class="btn-buy" style="text-decoration:none;">BUY</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    // Auto-remove toast after animation completes
+    setTimeout(() => {
+        const t = document.querySelector('.toast-success');
+        if (t) t.remove();
+    }, 3600);
+</script>
+}

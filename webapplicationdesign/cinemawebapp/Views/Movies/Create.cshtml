@@ -1,0 +1,139 @@
+@model cinemawebapp.Models.Movie
+
+@{
+    ViewData["Title"] = "Add Movie";
+}
+
+@section Styles {
+<style>
+    .page-header { text-align: center; padding: 60px 0 40px; }
+    .page-header h1 { font-size: 36px; font-weight: 700; letter-spacing: 6px; text-transform: uppercase; color: white; margin-bottom: 8px; }
+    .page-header p { font-size: 12px; letter-spacing: 4px; text-transform: uppercase; color: #aaa; }
+    .form-card {
+        background-color: #0f0f0f; border: 1px solid #1e1e1e;
+        border-radius: 12px; padding: 40px; max-width: 760px; margin: 0 auto 60px;
+    }
+    .form-card::before { content: ''; display: block; height: 2px; background: #8B1A1A; border-radius: 2px 2px 0 0; margin: -40px -40px 40px; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .field-group { position: relative; margin-bottom: 20px; }
+    .field-group label {
+        display: block; font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+        color: #8B1A1A; font-weight: 700; margin-bottom: 8px;
+    }
+    .field-group input, .field-group textarea {
+        width: 100%; background-color: #141414; border: 1px solid #2a2a2a;
+        border-radius: 6px; color: white; font-size: 13px; padding: 12px 16px;
+        letter-spacing: 0.5px; transition: border-color 0.2s; font-family: inherit;
+    }
+    .field-group input:focus, .field-group textarea:focus {
+        outline: none; border-color: #8B1A1A;
+    }
+    .field-group textarea { resize: vertical; min-height: 100px; }
+    .field-group .text-danger { font-size: 11px; color: #cc2222; margin-top: 4px; display: block; }
+    .checkbox-group { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .checkbox-group input[type="checkbox"] { width: 16px; height: 16px; accent-color: #8B1A1A; cursor: pointer; }
+    .checkbox-group label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #aaa; margin: 0; cursor: pointer; }
+    .btn-save {
+        background: linear-gradient(135deg, #B20000, #8B0000);
+        color: white; font-size: 11px; font-weight: 700;
+        letter-spacing: 3px; text-transform: uppercase;
+        padding: 14px 36px; border-radius: 6px; border: none; cursor: pointer;
+        transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(178,0,0,0.4);
+    }
+    .btn-save:hover { background: linear-gradient(135deg, #CC0000, #990000); transform: scale(1.05); }
+    .btn-back {
+        position: relative; overflow: hidden;
+        background: transparent; border: 1px solid #2a2a2a; color: #aaa;
+        font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+        padding: 14px 36px; border-radius: 6px; text-decoration: none;
+        display: inline-block; transition: color 0.3s, border-color 0.3s;
+    }
+    .btn-back::before {
+        content: ''; position: absolute; inset: 0;
+        background: #1e1e1e; transform: scaleX(0); transform-origin: left;
+        transition: transform 0.3s ease; z-index: 0;
+    }
+    .btn-back:hover::before { transform: scaleX(1); }
+    .btn-back:hover { color: white; border-color: #3a3a3a; }
+    .btn-back span { position: relative; z-index: 1; }
+    .form-actions { display: flex; gap: 12px; align-items: center; margin-top: 10px; }
+</style>
+}
+
+<div class="container">
+    <div class="page-header">
+        <h1>Add Movie</h1>
+        <p>Database — New Entry</p>
+    </div>
+
+    <div class="form-card">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger" style="margin-bottom:16px;font-size:12px;"></div>
+
+            <div class="form-row-2">
+                <div class="field-group">
+                    <label asp-for="Title"></label>
+                    <input asp-for="Title" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="field-group">
+                    <label asp-for="Director"></label>
+                    <input asp-for="Director" />
+                    <span asp-validation-for="Director" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-row-2">
+                <div class="field-group">
+                    <label asp-for="Genre"></label>
+                    <input asp-for="Genre" />
+                    <span asp-validation-for="Genre" class="text-danger"></span>
+                </div>
+                <div class="field-group">
+                    <label asp-for="AgeRating"></label>
+                    <input asp-for="AgeRating" />
+                    <span asp-validation-for="AgeRating" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-row-2">
+                <div class="field-group">
+                    <label asp-for="DurationMinutes"></label>
+                    <input asp-for="DurationMinutes" />
+                    <span asp-validation-for="DurationMinutes" class="text-danger"></span>
+                </div>
+                <div class="field-group">
+                    <label asp-for="ImagePath"></label>
+                    <input asp-for="ImagePath" />
+                    <span asp-validation-for="ImagePath" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label asp-for="TrailerUrl"></label>
+                <input asp-for="TrailerUrl" />
+                <span asp-validation-for="TrailerUrl" class="text-danger"></span>
+            </div>
+
+            <div class="field-group">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="checkbox-group">
+                <input asp-for="IsUpcoming" type="checkbox" />
+                <label asp-for="IsUpcoming">Coming Soon</label>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-save">Save Movie</button>
+                <a asp-action="Index" class="btn-back"><span>← Back</span></a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,768 @@
+@{
+    ViewData["Title"] = "Home";
+}
+@model IEnumerable<cinemawebapp.Models.Movie>
+@section Styles {
+<style>
+    /* CARDS */
+    .movie-card {
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+        background-color: #141414;
+        border: 1px solid #1e1e1e;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .movie-card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
+        border-color: #8B1A1A;
+    }
+    .movie-card .card-body {
+        padding: 12px 14px;
+        background-color: #141414;
+    }
+    .movie-card .card-title {
+        font-size: 13px;
+        font-weight: bold;
+        color: white;
+        letter-spacing: 1px;
+        margin-bottom: 0;
+    }
+    .movie-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: all 0.35s ease;
+}
+    .movie-card:hover img {
+        filter: brightness(0.35);
+    }
+
+    /* HOVER OVERLAY */
+    .movie-img-wrapper {
+    position: relative;
+    overflow: hidden;
+    height: 300px;  /* controlează dimensiunea */
+}
+    .movie-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 14px;
+        opacity: 0;
+        transition: opacity 0.35s ease;
+        pointer-events: none;
+    }
+    .movie-card:hover .movie-overlay {
+        opacity: 1;
+    }
+    .movie-card .card-body {
+    padding: 12px 14px;
+    background-color: #141414;
+    border: 1px solid #1e1e1e;          /* border subtil gri */
+    border-top-left-radius: 0;           /* colțul stânga sus drept */
+    border-top-right-radius: 0;          /* colțul dreapta sus drept */
+    border-bottom-left-radius: 8px;      /* colțul stânga jos rotunjit */
+    border-bottom-right-radius: 8px;     /* colțul dreapta jos rotunjit */
+    outline: none;                        /* elimină outline-ul implicit */
+}
+    .age-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #8B1A1A;
+        color: white;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 3px 7px;
+        border-radius: 4px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+    .overlay-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: white;
+        text-align: center;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+        line-height: 1.3;
+    }
+    .overlay-genres {
+        font-size: 13px;
+        color: #ccc;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-align: center;
+        margin-bottom: 6px;
+    }
+    .overlay-duration {
+        font-size: 12px;
+        color: #999;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    /* SLIDER */
+    .slider-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .slider-viewport {
+        overflow: hidden;
+        flex: 1;
+    }
+    .movie-slider {
+        display: flex;
+        gap: 16px;
+        padding: 10px 4px;
+        transition: transform 0.5s ease;
+        will-change: transform;
+    }
+    .movie-slider .slide-item {
+        min-width: 220px;
+        max-width: 220px;
+        flex-shrink: 0;
+    }
+    .slider-btn {
+        background: none;
+        border: none;
+        color: #333;
+        font-size: 52px;
+        cursor: pointer;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        line-height: 1;
+        padding: 0 8px;
+        transition: color 0.2s, text-shadow 0.2s;
+    }
+    .slider-btn:hover {
+        color: #cc2222;
+        text-shadow: 0 0 18px rgba(139, 26, 26, 0.85), 0 0 35px rgba(139, 26, 26, 0.4);
+    }
+
+    /* SECTION HEADERS */
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    .section-header h2 {
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: white;
+        margin: 0;
+        white-space: nowrap;
+    }
+    .section-header-line {
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(to right, #2a2a2a, transparent);
+    }
+
+    /* PROMO CARDS */
+    /* 🔥 PROMO CARDS UPDATED */
+.promo-card {
+    cursor: pointer;
+    background-color: #0f0f0f;           /* mai întunecat */
+    border: 2px solid #1e1e1e;          /* border inițial subtil */
+    border-radius: 12px;                  /* colțuri uniforme */
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); /* mai smooth */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2); /* umbră subtilă */
+}
+
+.promo-card:hover {
+    transform: scale(1.05);              /* zoom mai pronunțat la hover */
+    border-color: #8B1A1A;               /* outline roșu */
+    box-shadow: 0 12px 24px rgba(139,26,26,0.35); /* glow subtil roșu */
+}
+
+.promo-card:focus {
+    outline: 2px solid #8B1A1A;          /* outline vizibil la focus */
+    outline-offset: -2px;                 /* urmează conturul cardului */
+}
+
+.promo-card h6 {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: white;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.promo-card:hover h6 {
+    color: #ff4444;                       /* highlight text la hover */
+    transform: translateY(-2px);          /* efect subtil de mișcare */
+}
+
+.promo-card .card-body {
+    padding: 20px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: inherit;               /* outline-ul urmează colțurile */
+    background-color: inherit;            /* păstrează fundalul uniform */
+}
+
+    /* SECTION DIVIDER */
+    .section-divider {
+        height: 1px;
+        background: linear-gradient(to right, transparent, #1e1e1e, transparent);
+        border: none;
+        margin: 50px 0;
+    }
+
+    #cinemaCarousel {
+    max-width: 100%;       /* ocupă lățimea containerului */
+    height: 350px;         /* înălțimea bannerului */
+    overflow: hidden;      /* ascunde ce depășește */
+    border-radius: 10px;   /* optional, colțuri rotunjite */
+    position: relative;
+}
+
+#cinemaCarousel .carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;     /* scalează imaginea și taie marginile */
+    object-position: center center; /* partea vizibilă centrală */
+    display: block;
+    transition: transform 0.5s ease; /* zoom ușor */
+}
+
+/* optional: mic zoom cinematic pe imaginea activă */
+#cinemaCarousel .carousel-item.active img {
+    transform: scale(1.05);
+}
+
+#cinemaCarousel .carousel-item::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.25); /* semi-transparent negru */
+}
+
+.banner-slide {
+    display: flex;
+    height: 350px;             /* înălțime cinematică */
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Partea stângă – text + fade */
+.banner-text {
+    flex: 0 0 35%; /* text mai îngust, ~35% din lățime */
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    position: relative;
+}
+
+/* Gradient real pentru fade peste imagine */
+.banner-text::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -50px; /* suprapunere peste imagine */
+    width: 100px;  /* cât de lung e fade-ul */
+    height: 100%;
+    background: linear-gradient(to right, rgba(20,20,20,1), rgba(20,20,20,0));
+    pointer-events: none;
+}
+
+.banner-text h2 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.banner-text p {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #ccc;
+}
+
+/* Partea dreaptă – imagine cropată */
+.banner-img {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+.banner-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.banner-slide:hover .banner-img img {
+    transform: scale(1.05); /* zoom cinematic la hover */
+}
+
+
+/* BANNER SLIDER STYLES */
+.hero-banner {
+    position: relative;
+    height: 500px; /* 🔥 mai înalt */
+    overflow: hidden;
+    background: #0a0a0a;
+}
+
+.hero-banner::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, darkred, transparent);
+    z-index: 10;
+}
+
+.hero-slide {
+    display: none;
+    height: 100%;
+    position: relative;
+}
+.hero-slide.active { display: flex; }
+ 
+/* Imaginea — dreapta */
+.hero-img {
+    position: absolute;   /* 🔥 IMPORTANT */
+    inset: 0;             /* ocupă tot banner-ul */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;    /* umple tot spațiul */
+    object-position: 70% center; /* mută focusul imaginii */
+    z-index: 0;           /* rămâne în spate */
+}
+ 
+/* Gradientul stânga → dreapta (dark + culoare) */
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.95) 0%,
+        rgba(40, 0, 0, 0.85) 40%,
+        rgba(40, 0, 0, 0.4)  60%,
+        rgba(0, 0, 0, 0.0)  80%
+    );
+}
+ 
+/* Textul */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 60px;
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+.hero-title {
+    font-size: 42px;
+    font-weight: 900;
+    color: white;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    line-height: 1.1;
+}
+.hero-desc {
+    font-size: 14px;                  /* puțin mai mare pentru lizibilitate */
+    color: #dddddd;                   /* alb curat */
+    line-height: 1.5;                 /* mai compact, dar încă lizibil */
+    margin-bottom: 28px;
+    max-width: 390px;                 /* lungime confortabilă pentru citire */
+    letter-spacing: 0.5px;            /* puțin mai spațiat între litere pentru eleganță */
+    font-weight: 500;                  /* semi-bold pentru “premium feel” */
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5); /* vizibilitate mai bună pe imagine */
+}
+/* BUTOANE PREMIUM - BUY TICKET / MORE INFO */
+.hero-btn-primary, .hero-btn-secondary {
+    font-size: 13px;
+    font-weight: 900;
+    padding: 12px 28px;
+    border-radius: 6px;        /* păstrează forma originală */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-decoration: none;     /* fără underline */
+    transition: all 0.4s ease;
+}
+
+/* PRIMARY - Buy Ticket */
+.hero-btn-primary {
+    background: linear-gradient(135deg, #B20000, #8B0000);  /* roșu premium */
+    color: white;
+    box-shadow: 0 6px 15px rgba(178, 0, 0, 0.5);  /* glow subtil */
+}
+
+.hero-btn-primary:hover {
+    background: linear-gradient(135deg, #CC0000, #990000);
+    box-shadow: 0 8px 28px rgba(204, 0, 0, 0.7);
+    transform: scale(1.08);
+}
+
+/* SECONDARY - More Info */
+.hero-btn-secondary {
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.6);
+    color: white;
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+.hero-btn-secondary:hover {
+    border-color: #B20000;
+    color: #B20000;
+    box-shadow: 0 6px 20px rgba(178,0,0,0.4);
+    transform: scale(1.08);
+}
+ 
+/* Dots */
+.hero-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 60px;
+    display: flex;
+    gap: 8px;
+    z-index: 3;
+}
+.hero-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    border: none; cursor: pointer; padding: 0;
+    transition: background 0.2s;
+}
+.hero-dot.active { background: white; }
+ 
+/* Săgețe */
+.hero-arrows {
+    position: absolute;
+    bottom: 12px;
+    right: 30px;
+    display: flex;
+    gap: 8px;
+    z-index: 3;
+}
+/* SAGETI PREV / NEXT */
+.hero-arrow {
+    width: 50px;        /* mai mari */
+    height: 50px;
+    font-size: 28px;    /* săgețile mai mari */
+    border-radius: 50%; /* butoane perfect circulare */
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.2);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.hero-arrow:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: #B20000; /* roșu mai închis la hover */
+    color: #B20000;
+    font-size: 36px; 
+    transform: scale(1.1);
+}
+</style>
+}
+
+<!-- BANNER SLIDER -->
+<div class="hero-banner" id="heroBanner">
+ 
+    <!-- SLIDE 1 -->
+    <div class="hero-slide active">
+        <img class="hero-img" src="/images/negrubanner2.jpg" style="object-position: 50% 25%;" alt="The Dark Knight">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-title">The Dark Knight</div>
+            <p class="hero-desc">When the Joker unleashes chaos on Gotham, Batman must confront the limits of justice and his own humanity.</p>
+            <div>
+                <a href="/Home/Tickets"     class="hero-btn-primary">Buy Tickets</a>
+                <a href="/Home/MovieDetails/1" class="hero-btn-secondary">More Info</a>
+            </div>
+        </div>
+    </div>
+ 
+    <!-- SLIDE 2 -->
+    <div class="hero-slide">
+        <img class="hero-img" src="/images/carsbanner2.jpg" style="object-position: 50% 88%;" alt="Cars">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-title">Cars</div>
+            <p class="hero-desc">A hotshot racing car gets stranded in a small town and discovers that life is about more than winning.</p>
+            <div>
+                <a href="/Home/Tickets"     class="hero-btn-primary">Buy Tickets</a>
+                <a href="/Home/MovieDetails/6" class="hero-btn-secondary">More Info</a>
+            </div>
+        </div>
+    </div>
+ 
+    <!-- SLIDE 3 -->
+    <div class="hero-slide">
+        <img class="hero-img" src="/images/parasitebanner2.jpg" alt="Parasite">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-title">Parasite</div>
+            <p class="hero-desc">Greed and class discrimination collide when two families become entangled in an unexpected incident.</p>
+            <div>
+                <a href="/Home/Tickets"     class="hero-btn-primary">Buy Tickets</a>
+                <a href="/Home/MovieDetails/4" class="hero-btn-secondary">More Info</a>
+            </div>
+        </div>
+    </div>
+ 
+    <!-- Dots -->
+    <div class="hero-dots" id="heroDots"></div>
+ 
+    <!-- Arrows -->
+    <div class="hero-arrows">
+        <button class="hero-arrow" onclick="heroPrev()">&#8249;</button>
+        <button class="hero-arrow" onclick="heroNext()">&#8250;</button>
+    </div>
+</div>
+
+<!-- NOW SHOWING -->
+<div class="container mt-5">
+    <div class="section-header">
+        <h2>Retro Week — Now in Theaters</h2>
+        <div class="section-header-line"></div>
+    </div>
+    <div class="slider-wrapper">
+        <button class="slider-btn" id="nowShowing-prev">&#8249;</button>
+        <div class="slider-viewport">
+           <div class="movie-slider" id="nowShowing">
+    @foreach (var movie in Model)
+    {
+        <div class="slide-item">
+            <a href="/Home/MovieDetails/@movie.Id" class="text-decoration-none">
+                <div class="card movie-card">
+                    <div class="movie-img-wrapper">
+                        <img src="@movie.ImagePath" alt="@movie.Title">
+                        <div class="movie-overlay">
+                            <span class="age-badge">@movie.AgeRating</span>
+                            <div class="overlay-title">@movie.Title</div>
+                            <div class="overlay-genres">@movie.Genre</div>
+                            <div class="overlay-duration">@movie.DurationMinutes min</div>
+                        </div>
+                    </div>
+                    <div class="card-body"><h5 class="card-title">@movie.Title</h5></div>
+                </div>
+            </a>
+        </div>
+    }
+</div>
+        </div>
+        <button class="slider-btn" id="nowShowing-next">&#8250;</button>
+    </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- COMING SOON -->
+<div class="container">
+    <div class="section-header">
+        <h2>Coming Soon in Theaters</h2>
+        <div class="section-header-line"></div>
+    </div>
+    <div class="slider-wrapper">
+        <button class="slider-btn" id="comingSoon-prev">&#8249;</button>
+        <div class="slider-viewport">
+            <div class="movie-slider" id="comingSoon">
+
+               @foreach (var movie in (IEnumerable<cinemawebapp.Models.Movie>)ViewBag.ComingSoon)
+               {
+                   <div class="slide-item">
+                       <a href="/Home/MovieDetails/@movie.Id" class="text-decoration-none">
+                           <div class="card movie-card">
+                               <div class="movie-img-wrapper">
+                                   <img src="@movie.ImagePath" alt="@movie.Title">
+                                   <div class="movie-overlay">
+                                       <span class="age-badge">@movie.AgeRating</span>
+                                       <div class="overlay-title">@movie.Title</div>
+                                       <div class="overlay-genres">@movie.Genre</div>
+                                       <div class="overlay-duration">@movie.DurationMinutes min</div>
+                                   </div>
+                               </div>
+                               <div class="card-body"><h5 class="card-title">@movie.Title</h5></div>
+                           </div>
+                       </a>
+                   </div>
+               }
+           </div>
+        </div>
+        <button class="slider-btn" id="comingSoon-next">&#8250;</button>
+    </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- PROMOTIONS -->
+<div class="container mb-5">
+    <div class="section-header">
+        <h2>Promotions</h2>
+        <div class="section-header-line"></div>
+    </div>
+    <div class="d-flex justify-content-center flex-wrap gap-3">
+        @foreach (var promo in (ViewBag.Promotions as IEnumerable<cinemawebapp.Models.Promotion> ?? Enumerable.Empty<cinemawebapp.Models.Promotion>()))
+        {
+            <a href="/Home/PromoDetails/@promo.Id" class="text-decoration-none" style="width:220px;">
+                <div class="promo-card h-100">
+                    <div class="card-body text-center py-4">
+                        <div style="font-size:26px; margin-bottom:10px;">@promo.Emoji</div>
+                        <h6 class="fw-bold text-uppercase mb-0">@promo.Title</h6>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    function initInfiniteSlider(sliderId, intervalMs) {
+        const slider = document.getElementById(sliderId);
+        const itemWidth = 220 + 16;
+        let autoInterval;
+        let currentIndex = 0;
+        let isAnimating = false;
+
+        const originals = Array.from(slider.children);
+        const total = originals.length;
+
+        originals.forEach(item => slider.appendChild(item.cloneNode(true)));
+        originals.slice().reverse().forEach(item => slider.insertBefore(item.cloneNode(true), slider.firstChild));
+
+        currentIndex = total;
+        slider.style.transition = 'none';
+        slider.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+
+        function goTo(index, animate) {
+            return new Promise(resolve => {
+                slider.style.transition = animate ? 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none';
+                slider.style.transform = `translateX(-${index * itemWidth}px)`;
+                if (animate) {
+                    slider.addEventListener('transitionend', function handler() {
+                        slider.removeEventListener('transitionend', handler);
+                        resolve();
+                    });
+                } else {
+                    slider.getBoundingClientRect();
+                    resolve();
+                }
+            });
+        }
+
+        async function next() {
+            if (isAnimating) return;
+            isAnimating = true;
+            currentIndex++;
+            await goTo(currentIndex, true);
+            if (currentIndex >= total * 2) {
+                currentIndex = total;
+                await goTo(currentIndex, false);
+            }
+            isAnimating = false;
+        }
+
+        async function prev() {
+            if (isAnimating) return;
+            isAnimating = true;
+            currentIndex--;
+            await goTo(currentIndex, true);
+            if (currentIndex < total) {
+                currentIndex = total * 2 - 1;
+                await goTo(currentIndex, false);
+            }
+            isAnimating = false;
+        }
+
+        function startAuto() { autoInterval = setInterval(next, intervalMs); }
+        function stopAuto() { clearInterval(autoInterval); }
+
+        startAuto();
+        slider.addEventListener('mouseenter', stopAuto);
+        slider.addEventListener('mouseleave', startAuto);
+        document.getElementById(sliderId + '-prev').addEventListener('click', () => { stopAuto(); prev(); startAuto(); });
+        document.getElementById(sliderId + '-next').addEventListener('click', () => { stopAuto(); next(); startAuto(); });
+    }
+
+    initInfiniteSlider('nowShowing', 3000);
+    initInfiniteSlider('comingSoon', 4000);
+
+    /* 🔥 HERO BANNER SCRIPT */
+    (function() {
+        const slides = document.querySelectorAll('.hero-slide');
+        const dotsEl = document.getElementById('heroDots');
+
+        if (!slides.length || !dotsEl) return;
+
+        let cur = 0;
+        let timer;
+
+        slides.forEach((_, i) => {
+            const d = document.createElement('button');
+            d.className = 'hero-dot' + (i === 0 ? ' active' : '');
+            d.onclick = () => goTo(i);
+            dotsEl.appendChild(d);
+        });
+
+        function goTo(n) {
+            slides[cur].classList.remove('active');
+            dotsEl.children[cur].classList.remove('active');
+
+            cur = (n + slides.length) % slides.length;
+
+            slides[cur].classList.add('active');
+            dotsEl.children[cur].classList.add('active');
+        }
+
+        window.heroNext = () => goTo(cur + 1);
+        window.heroPrev = () => goTo(cur - 1);
+
+        function start() {
+            timer = setInterval(() => goTo(cur + 1), 5000);
+        }
+
+        function stop() {
+            clearInterval(timer);
+        }
+
+        start();
+
+        const banner = document.getElementById('heroBanner');
+        if (banner) {
+            banner.addEventListener('mouseenter', stop);
+            banner.addEventListener('mouseleave', start);
+        }
+    })();
+</script>
+}}

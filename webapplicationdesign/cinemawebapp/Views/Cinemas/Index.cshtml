@@ -1,0 +1,123 @@
+﻿@model IEnumerable<cinemawebapp.Models.Cinema>
+
+@{
+    ViewData["Title"] = "Cinemas";
+}
+
+@section Styles {
+<style>
+    .btn-add {
+        position: relative;
+        background: linear-gradient(135deg, #B20000, #8B0000);
+        border: none;
+        color: white;
+        font-weight: 900;
+        letter-spacing: 3px;
+        padding: 8px 22px;
+        font-size: 11px;
+        border-radius: 6px;
+        text-transform: uppercase;
+        text-decoration: none;
+        box-shadow: 0 6px 15px rgba(178,0,0,0.5);
+        transition: all 0.4s ease;
+        display: inline-block;
+    }
+    .btn-add:hover {
+        background: linear-gradient(135deg, #CC0000, #990000);
+        box-shadow: 0 8px 28px rgba(204,0,0,0.7);
+        transform: scale(1.05);
+        color: white;
+    }
+
+    .action-link {
+        font-size: 10px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        text-decoration: none;
+        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 4px;
+        border: 1px solid transparent;
+        transition: all 0.25s ease;
+        display: inline-block;
+    }
+    .action-details {
+    color: #aaa;
+    border-color: #333;
+}
+.action-details:hover {
+    color: white;
+    border-color: #555;
+    background: #1e1e1e;
+}
+.action-edit {
+    color: #aaa;
+    border-color: #333;
+}
+.action-edit:hover {
+    color: white;
+    border-color: #555;
+    background: #1e1e1e;
+}
+    .action-delete {
+        color: #8B1A1A;
+        border-color: #3a1010;
+    }
+    .action-delete:hover {
+        background: #8B1A1A;
+        color: white;
+        border-color: #8B1A1A;
+        box-shadow: 0 4px 12px rgba(139,26,26,0.4);
+    }
+
+    .cinema-row {
+        border-bottom: 1px solid #1a1a1a;
+        transition: background-color 0.2s;
+    }
+    .cinema-row:hover {
+        background-color: #111;
+    }
+    .cinema-row:last-child {
+        border-bottom: none;
+    }
+</style>
+}
+
+<div class="container mt-5 mb-5">
+    <h1 class="mb-2 fw-bold text-uppercase text-center" style="letter-spacing:4px;">Cinemas</h1>
+    <p class="text-center mb-4" style="color:#aaa; font-size:12px; letter-spacing:3px; text-transform:uppercase;">Database — All Cinemas</p>
+
+    <div class="text-end mb-3">
+        <a href="/Cinemas/Create" class="btn-add">+ Add Cinema</a>
+    </div>
+
+    <div style="background-color:#0f0f0f; border-radius:12px; border:1px solid #1e1e1e; overflow:hidden;">
+        <table style="width:100%; border-collapse:collapse;">
+            <thead>
+                <tr style="border-bottom:1px solid #8B1A1A;">
+                    <th style="padding:14px 20px; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#8B1A1A;">Name</th>
+                    <th style="padding:14px 20px; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#8B1A1A;">City</th>
+                    <th style="padding:14px 20px; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#8B1A1A;">Contact</th>
+                    <th style="padding:14px 20px; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#8B1A1A;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cinema in Model)
+                {
+                    <tr class="cinema-row">
+                        <td style="padding:14px 20px; color:white; font-weight:bold; font-size:13px;">@cinema.Name</td>
+                        <td style="padding:14px 20px; color:#aaa; font-size:13px;">@cinema.City</td>
+                        <td style="padding:14px 20px; color:#aaa; font-size:13px;">@cinema.Contact</td>
+                        <td style="padding:14px 20px;">
+                            <div class="d-flex gap-2">
+                                <a href="/Cinemas/Details/@cinema.Id" class="action-link action-details">Details</a>
+                                <a href="/Cinemas/Edit/@cinema.Id"    class="action-link action-edit">Edit</a>
+                                <a href="/Cinemas/Delete/@cinema.Id"  class="action-link action-delete">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

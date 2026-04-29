@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"] - The Film Vault</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        * { font-family: 'Josefin Sans', sans-serif; }
+
+        body {
+            background-color: #0d0d0d;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        body > nav,
+        body > main,
+        body > footer { position: relative; z-index: 1; }
+
+        /* NAVBAR */
+        .site-navbar {
+            background-color: rgba(8,8,8,0.80);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(80,10,10,0.5);
+            padding: 0; position: sticky; top: 0; z-index: 1000;
+        }
+        .navbar-inner { display: flex; align-items: stretch; justify-content: space-between; height: 64px; }
+        .navbar-brand-custom { display: flex; align-items: center; text-decoration: none; padding: 0 28px 0 0; border-right: 1px solid #1a1a1a; gap: 12px; }
+        .navbar-brand-bar { width: 3px; height: 28px; background-color: #8B1A1A; border-radius: 2px; }
+        .navbar-brand-text { font-size: 15px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: white; transition: color 0.2s; }
+        .navbar-brand-custom:hover .navbar-brand-text { color: #8B1A1A; }
+        .navbar-links { display: flex; align-items: stretch; list-style: none; margin: 0; padding: 0; }
+        .navbar-links li { display: flex; align-items: stretch; }
+        .navbar-links li a,
+        .navbar-links li button.nav-btn {
+            display: flex; align-items: center; padding: 0 20px;
+            font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+            color: #666; text-decoration: none; border-bottom: 2px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
+            background: none; border-top: none; border-left: none; border-right: none;
+            cursor: pointer; font-family: inherit;
+        }
+        .navbar-links li a:hover, .navbar-links li button.nav-btn:hover { color: white; border-bottom-color: #8B1A1A; }
+        .navbar-links li a.active { color: white; border-bottom-color: #8B1A1A; }
+        .navbar-links li.nav-sep { border-left: 1px solid #1a1a1a; margin-left: 8px; padding-left: 8px; }
+        .navbar-links li span.nav-user { display: flex; align-items: center; padding: 0 16px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #444; }
+        .navbar-toggler-custom { display: none; background: none; border: 1px solid #2a2a2a; border-radius: 4px; padding: 8px 12px; cursor: pointer; color: #666; font-size: 18px; }
+
+        @@media (max-width: 991px) {
+            .navbar-links { display: none; flex-direction: column; width: 100%; background-color: rgba(8,8,8,0.98); border-top: 1px solid #1a1a1a; position: absolute; top: 64px; left: 0; right: 0; }
+            .navbar-links.open { display: flex; }
+            .navbar-links li a, .navbar-links li button.nav-btn { padding: 16px 24px; border-bottom: none; border-left: 2px solid transparent; width: 100%; }
+            .navbar-links li a:hover, .navbar-links li button.nav-btn:hover, .navbar-links li a.active { border-bottom: none; border-left-color: #8B1A1A; background-color: #0f0f0f; }
+            .navbar-links li.nav-sep { border-left: none; border-top: 1px solid #1a1a1a; margin-left: 0; padding-left: 0; }
+            .navbar-toggler-custom { display: flex; align-items: center; }
+        }
+
+        .card, .card-body { background-color: #141414; color: white; border: 1px solid #222; }
+        footer { color: white; }
+        h1, h2, h5 { color: white; }
+        .table-dark { background-color: #1a1a1a; color: white; }
+        .table-dark th, .table-dark td { color: white; border-color: #2a2a2a; }
+        .list-group-item { background-color: #1a1a1a; color: white; border-color: #2a2a2a; }
+        select.form-select, input.form-control { background-color: #1a1a1a; color: white; border: 1px solid #333; }
+
+        /* FOOTER — fundal solid ca să nu fie afectat de canvas */
+        .site-footer {
+            background-color: #080808;
+            border-top: 1px solid #1a1a1a;
+            padding: 40px 0 20px;
+            position: relative;
+            z-index: 2;
+            font-family: 'Josefin Sans', sans-serif;
+        }
+        .footer-divider { height: 1px; background: linear-gradient(to right, transparent, #3a0a0a, transparent); border: none; margin-bottom: 40px; }
+        .footer-brand { font-size: 20px; font-weight: bold; letter-spacing: 3px; color: white; text-transform: uppercase; text-decoration: none; font-family: 'Josefin Sans', sans-serif; }
+        .footer-brand:hover { color: #8B1A1A; }
+        .footer-col-title { font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 3px; color: #ccc; margin-bottom: 16px; font-family: 'Josefin Sans', sans-serif; }
+        .footer-link { display: block; color: #aaa; text-decoration: none; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; margin-bottom: 10px; transition: color 0.2s; font-family: 'Josefin Sans', sans-serif; }
+        .footer-link:hover { color: white; }
+        .footer-bottom { border-top: 1px solid #1a1a1a; margin-top: 40px; padding-top: 20px; text-align: center; font-size: 11px; color: #aaa; letter-spacing: 2px; font-family: 'Josefin Sans', sans-serif; }
+
+        /* PAGE TRANSITION */
+        main { animation: pageFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        @@keyframes pageFadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+
+<body>
+<canvas id="bg-canvas"></canvas>
+
+@{
+    var action     = ViewContext.RouteData.Values["action"]?.ToString();
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+
+<nav class="site-navbar">
+    <div class="container">
+        <div class="navbar-inner">
+            <a href="/Home/Index" class="navbar-brand-custom">
+                <div class="navbar-brand-bar"></div>
+                <span class="navbar-brand-text">The Film Vault</span>
+            </a>
+            <button class="navbar-toggler-custom" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button>
+            <ul class="navbar-links" id="navLinks">
+                <li><a href="/Home/Index"      class="@(action == "Index" && controller == "Home" ? "active" : "")">Home</a></li>
+                <li><a href="/Home/Movies"     class="@(action == "Movies" || action == "Upcoming" ? "active" : "")">Movies</a></li>
+                <li><a href="/Home/Program"    class="@(action == "Program"    ? "active" : "")">Schedule</a></li>
+                <li><a href="/Home/Promotions" class="@(action == "Promotions" ? "active" : "")">Promotions</a></li>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <li class="nav-sep">
+                        <a href="/Home/Profile" class="@(action == "Profile" ? "active" : "")">Profile</a>
+                    </li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li><a href="/Users"       class="@(controller == "Users"       ? "active" : "")">Users</a></li>
+                        <li><a href="/TicketTypes" class="@(controller == "TicketTypes" ? "active" : "")">Ticket Types</a></li>
+                    }
+                    <li>
+                        <form method="post" action="/Identity/Account/Logout" style="display:contents;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="returnUrl" value="/" />
+                            <button type="submit" class="nav-btn">Logout</button>
+                        </form>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-sep">
+                        <a href="/Identity/Account/Login"    class="@(action == "Login"    ? "active" : "")">Login</a>
+                    </li>
+                    <li>
+                        <a href="/Identity/Account/Register" class="@(action == "Register" ? "active" : "")">Register</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="flex-grow-1">
+    @RenderBody()
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <a href="/Home/Index" class="footer-brand">THE FILM VAULT</a>
+                <p class="mt-3" style="color:#aaa; font-size:14px; letter-spacing:1px; line-height:1.8;">
+                    A ROMANIAN retro cinema network.<br>
+                    office@thefilmvault.ro
+                </p>
+            </div>
+            <div class="col-md-2 mb-4">
+                <div class="footer-col-title">MENU</div>
+                <a href="/Home/Index"      class="footer-link">Home</a>
+                <a href="/Home/Movies"     class="footer-link">Movies</a>
+                <a href="/Home/Program"    class="footer-link">Schedule</a>
+                <a href="/Home/Tickets"    class="footer-link">Tickets</a>
+                <a href="/Home/Promotions" class="footer-link">Promotions</a>
+                <a href="/Home/Tarife"     class="footer-link">Pricing</a>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="footer-col-title">INFO</div>
+                <a href="/Home/About"   class="footer-link">About Us</a>
+                <a href="/Home/Cinemas" class="footer-link">Our Cinemas</a>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+                    <a href="https://anpc.ro/ce-este-sal/" target="_blank">
+                        <img src="/images/salANPC.png" alt="" style="width:65%;object-fit:cover;border-radius:6px;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">
+                    </a>
+                    <a href="https://consumer-redress.ec.europa.eu/index_en" target="_blank">
+                        <img src="/images/solEC.png" alt="" style="width:65%;object-fit:cover;border-radius:6px;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">© 2026 THE FILM VAULT — ALL RIGHTS RESERVED</div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
+
+<script>
+(function () {
+    const canvas = document.getElementById('bg-canvas');
+    const ctx    = canvas.getContext('2d');
+    let W, H;
+
+    function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+    }
+
+    // ── Forme geometrice — stil PlayStation Dynamic Theme ─────────────
+    // Tipuri: triunghi, patrat, romb, hexagon, linie
+    const SHAPE_TYPES = ['triangle', 'square', 'diamond', 'hexagon', 'line'];
+
+    function randomBetween(a, b) { return a + Math.random() * (b - a); }
+
+    function createShape() {
+        const type    = SHAPE_TYPES[Math.floor(Math.random() * SHAPE_TYPES.length)];
+        const size    = randomBetween(18, 90);
+        // Culori: gri deschis cu ocazional roșu burgundy rar
+        const isRed   = Math.random() < 0.12;
+        const gray    = Math.floor(randomBetween(55, 160));
+        const color   = isRed
+            ? `rgba(${randomBetween(120,180)|0}, ${randomBetween(0,15)|0}, ${randomBetween(5,20)|0},`
+            : `rgba(${gray}, ${gray}, ${gray},`;
+
+        return {
+            type,
+            x:       randomBetween(-100, W + 100),
+            y:       randomBetween(-100, H + 100),
+            size,
+            color,
+            opacity:     randomBetween(0.04, 0.18),
+            // stroke only vs fill
+            fill:    Math.random() < 0.3,
+            lineW:   randomBetween(0.5, 1.8),
+            // mișcare
+            vx:      randomBetween(-0.12, 0.12),
+            vy:      randomBetween(-0.18, -0.04), // se mișcă preponderent în sus
+            // rotație
+            angle:   randomBetween(0, Math.PI * 2),
+            vAngle:  randomBetween(-0.002, 0.002),
+            // fade in/out
+            phase:   randomBetween(0, Math.PI * 2),
+            fadeSpeed: randomBetween(0.003, 0.008),
+        };
+    }
+
+    // Inițializăm cu forme distribuite pe tot ecranul
+    let shapes = [];
+    function initShapes() {
+        shapes = [];
+        const count = Math.min(Math.floor((W * H) / 14000), 80);
+        for (let i = 0; i < count; i++) {
+            const s = createShape();
+            s.x = randomBetween(0, W);
+            s.y = randomBetween(0, H);
+            shapes.push(s);
+        }
+    }
+
+    function drawHexagon(cx, cy, r) {
+        ctx.beginPath();
+        for (let i = 0; i < 6; i++) {
+            const a = (Math.PI / 3) * i - Math.PI / 6;
+            i === 0 ? ctx.moveTo(cx + r * Math.cos(a), cy + r * Math.sin(a))
+                    : ctx.lineTo(cx + r * Math.cos(a), cy + r * Math.sin(a));
+        }
+        ctx.closePath();
+    }
+
+    function drawShape(s, t) {
+        const fade = 0.5 + 0.5 * Math.sin(t * s.fadeSpeed * 1000 + s.phase);
+        const op   = s.opacity * fade;
+        if (op < 0.005) return;
+
+        ctx.save();
+        ctx.translate(s.x, s.y);
+        ctx.rotate(s.angle);
+
+        const styleStr = s.color + op + ')';
+
+        if (s.fill) {
+            ctx.fillStyle = styleStr;
+        } else {
+            ctx.strokeStyle = styleStr;
+            ctx.lineWidth   = s.lineW;
+        }
+
+        const sz = s.size;
+
+        switch (s.type) {
+            case 'triangle':
+                ctx.beginPath();
+                ctx.moveTo(0, -sz);
+                ctx.lineTo(sz * 0.866, sz * 0.5);
+                ctx.lineTo(-sz * 0.866, sz * 0.5);
+                ctx.closePath();
+                s.fill ? ctx.fill() : ctx.stroke();
+                break;
+
+            case 'square':
+                const h = sz * 0.5;
+                ctx.beginPath();
+                ctx.rect(-h, -h, sz, sz);
+                s.fill ? ctx.fill() : ctx.stroke();
+                break;
+
+            case 'diamond':
+                ctx.beginPath();
+                ctx.moveTo(0, -sz);
+                ctx.lineTo(sz * 0.55, 0);
+                ctx.lineTo(0, sz);
+                ctx.lineTo(-sz * 0.55, 0);
+                ctx.closePath();
+                s.fill ? ctx.fill() : ctx.stroke();
+                break;
+
+            case 'hexagon':
+                drawHexagon(0, 0, sz * 0.6);
+                s.fill ? ctx.fill() : ctx.stroke();
+                break;
+
+            case 'line':
+                ctx.beginPath();
+                ctx.moveTo(-sz, 0);
+                ctx.lineTo(sz, 0);
+                ctx.strokeStyle = styleStr;
+                ctx.lineWidth   = s.lineW;
+                ctx.stroke();
+                break;
+        }
+
+        ctx.restore();
+    }
+
+    function updateShape(s) {
+        s.x     += s.vx;
+        s.y     += s.vy;
+        s.angle += s.vAngle;
+
+        // Reintroducem forma din jos când iese sus (sau pe laterale)
+        const margin = 150;
+        if (s.y < -margin) {
+            s.y  = H + margin;
+            s.x  = randomBetween(-100, W + 100);
+        }
+        if (s.x < -margin) s.x = W + margin;
+        if (s.x > W + margin) s.x = -margin;
+    }
+
+    // Gradient de fundal subtil — negru cu o nuanță burgundy în colț
+    function drawBackground(t) {
+        ctx.fillStyle = '#0d0d0d';
+        ctx.fillRect(0, 0, W, H);
+
+        // Glow burgundy subtil — pulsează
+        const pulse = 0.5 + 0.5 * Math.sin(t * 0.0003);
+        const grd = ctx.createRadialGradient(
+            W * 0.15, H * 0.85, 0,
+            W * 0.15, H * 0.85, W * 0.55
+        );
+        grd.addColorStop(0,   `rgba(80, 0, 8, ${0.18 * pulse})`);
+        grd.addColorStop(0.5, `rgba(50, 0, 5, ${0.08 * pulse})`);
+        grd.addColorStop(1,   'rgba(0,0,0,0)');
+        ctx.fillStyle = grd;
+        ctx.fillRect(0, 0, W, H);
+
+        // Secondo glow — colț opus
+        const grd2 = ctx.createRadialGradient(
+            W * 0.85, H * 0.15, 0,
+            W * 0.85, H * 0.15, W * 0.45
+        );
+        const p2 = 0.5 + 0.5 * Math.sin(t * 0.0002 + 1.8);
+        grd2.addColorStop(0,   `rgba(60, 0, 6, ${0.14 * p2})`);
+        grd2.addColorStop(1,   'rgba(0,0,0,0)');
+        ctx.fillStyle = grd2;
+        ctx.fillRect(0, 0, W, H);
+    }
+
+    function drawVignette() {
+        const vg = ctx.createRadialGradient(W/2, H/2, H * 0.25, W/2, H/2, H * 0.85);
+        vg.addColorStop(0, 'rgba(0,0,0,0)');
+        vg.addColorStop(1, 'rgba(0,0,0,0.78)');
+        ctx.fillStyle = vg;
+        ctx.fillRect(0, 0, W, H);
+    }
+
+    function frame(timestamp) {
+        drawBackground(timestamp);
+
+        // Forme
+        shapes.forEach(s => {
+            drawShape(s, timestamp);
+            updateShape(s);
+        });
+
+        drawVignette();
+
+        requestAnimationFrame(frame);
+    }
+
+    resize();
+    initShapes();
+    window.addEventListener('resize', () => { resize(); initShapes(); });
+    requestAnimationFrame(frame);
+})();
+</script>
+
+</body>
+</html>

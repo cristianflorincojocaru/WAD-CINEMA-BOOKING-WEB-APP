@@ -1,0 +1,170 @@
+@{
+    ViewData["Title"] = "About Us";
+}
+
+@section Styles {
+<style>
+    .about-card {
+        background-color: #0f0f0f;
+        border: none;
+        border-left: 2px solid #8B1A1A;
+        border-radius: 0 10px 10px 0;
+        margin-bottom: 20px;
+    }
+    .about-card .card-body {
+        padding: 30px 40px;
+    }
+    .about-card .card-title {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 16px;
+    color: #8B1A1A;
+    margin-bottom: 20px;
+}
+    .about-card p, .about-card li {
+        color: #aaa;
+        line-height: 2;
+        font-size: 15px;
+    }
+    .about-card strong {
+        color: white;
+    }
+
+    .hero-quote {
+        text-align: center;
+        font-size: 17px;
+        font-style: italic;
+        color: #aaa;
+        padding: 30px 0;
+        margin-bottom: 50px;
+        letter-spacing: 1px;
+        position: relative;
+    }
+    .hero-quote::before,
+    .hero-quote::after {
+        content: '';
+        display: block;
+        height: 1px;
+        background: linear-gradient(to right, transparent, #2a2a2a, transparent);
+    }
+    .hero-quote::before { margin-bottom: 24px; }
+    .hero-quote::after { margin-top: 24px; }
+
+    .hero-quote .author {
+    display: block;
+    margin-top: 12px;
+    font-style: normal;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #aaa;
+}
+
+    .contact-block {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .contact-line {
+        display: flex;
+        align-items: flex-start;
+        gap: 24px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #1a1a1a;
+    }
+    .contact-line:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+    .contact-label {
+        color: #8B1A1A;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 11px;
+        min-width: 100px;
+        padding-top: 2px;
+    }
+    .contact-value {
+        color: #aaa;
+        font-size: 14px;
+        letter-spacing: 1px;
+    }
+
+    .section-divider {
+        height: 1px;
+        background: linear-gradient(to right, transparent, #2a2a2a, transparent);
+        border: none;
+        margin: 0 0 40px 0;
+    }
+</style>
+}
+
+<div class="container mt-5 mb-5" style="max-width: 1000px;">
+
+    <h1 class="mb-2 fw-bold text-uppercase text-center" style="letter-spacing:4px;">About Us</h1>
+    <p class="text-center mb-4" style="color:#aaa; font-size:12px; letter-spacing:3px; text-transform:uppercase;">The Film Vault — ROMANIA</p>
+
+    <hr class="section-divider">
+
+    <!-- HERO QUOTE -->
+    <div class="hero-quote">
+        "Cinema is the most beautiful fraud in the world."
+        <span class="author">— Jean-Luc Godard</span>
+    </div>
+
+    <!-- OUR STORY -->
+    <div class="card about-card">
+        <div class="card-body">
+            <h5 class="card-title">Our Story</h5>
+            <p>
+                <strong>THE FILM VAULT</strong> is a Romanian cinema network born from the passion of true cinephiles —
+                people who believe that the greatest films ever made deserve to be seen on the big screen,
+                not forgotten on a hard drive.
+            </p>
+            <p>
+                Founded with a single mission, The Film Vault brings back the golden age of cinema,
+                offering weekly curated programmes of the most celebrated films in the history of
+                the seventh art — from timeless classics to genre-defining masterpieces.
+            </p>
+        </div>
+    </div>
+
+    <!-- WHY THE FILM VAULT -->
+    <div class="card about-card">
+        <div class="card-body">
+            <h5 class="card-title">Why The Film Vault?</h5>
+            <p>
+                In a world of infinite content and endless scrolling, we offer the opposite —
+                a curated, intentional cinema experience. No algorithm decides what you watch.
+                Our team does, with care and knowledge.
+            </p>
+            <p>
+                Every detail has been thought through: the acoustics, the seating, the projection quality,
+                and above all, the selection. When you walk into The Film Vault,
+                you are not just watching a film — you are part of its history.
+            </p>
+        </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div style="background-color:#0f0f0f; border:1px solid #1e1e1e; border-top: 2px solid #8B1A1A; border-radius:0 0 10px 10px; padding:40px 50px; margin-bottom:40px;">
+        <h4 class="fw-bold text-uppercase mb-4" style="letter-spacing:4px; color:#8B1A1A; font-size:16px;">Contact</h4>
+        <div class="contact-block">
+            <div class="contact-line">
+                <span class="contact-label">Address</span>
+                <span class="contact-value">Kiseleff Palace, 15 Pavel D. Kiseleff Avenue, Bucharest</span>
+            </div>
+            <div class="contact-line">
+                <span class="contact-label">Email</span>
+                <span class="contact-value">office@thefilmvault.ro</span>
+            </div>
+            <div class="contact-line">
+                <span class="contact-label">Programme</span>
+                <span class="contact-value">Monday – Sunday, 10:00 – 23:00</span>
+            </div>
+        </div>
+    </div>
+
+</div>

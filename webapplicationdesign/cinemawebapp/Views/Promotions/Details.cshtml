@@ -1,0 +1,127 @@
+@model cinemawebapp.Models.Promotion
+
+@{
+    ViewData["Title"] = "Promotion Details";
+}
+
+@section Styles {
+<style>
+    .page-header { text-align: center; padding: 60px 0 40px; }
+    .page-header h1 { font-size: 36px; font-weight: 700; letter-spacing: 6px; text-transform: uppercase; color: white; margin-bottom: 8px; }
+    .page-header p { font-size: 12px; letter-spacing: 4px; text-transform: uppercase; color: #aaa; }
+    .section-divider { height: 1px; background: linear-gradient(to right, transparent, #2a2a2a, transparent); border: none; margin: 0 0 40px 0; }
+
+    .details-card {
+        background: #0c0c0c;
+        border: 1px solid #1e1e1e;
+        border-radius: 14px;
+        padding: 40px;
+        max-width: 680px;
+        margin: 0 auto;
+    }
+
+    .promo-hero {
+        text-align: center;
+        margin-bottom: 36px;
+        padding-bottom: 28px;
+        border-bottom: 1px solid #1a1a1a;
+    }
+    .promo-hero .emoji { font-size: 48px; display: block; margin-bottom: 16px; }
+    .promo-hero .title { font-size: 18px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; color: white; }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 16px 0;
+        border-bottom: 1px solid #141414;
+        gap: 20px;
+    }
+    .info-row:last-of-type { border-bottom: none; }
+    .info-label { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #555; flex-shrink: 0; width: 140px; }
+    .info-value { font-size: 13px; color: #ccc; letter-spacing: 1px; text-align: right; flex: 1; }
+    .info-value.desc { text-align: left; color: #aaa; line-height: 1.7; }
+
+    .badge-status { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; font-weight: 700; }
+    .badge-active { background-color: #1a2a1a; color: #4caf50; }
+    .badge-inactive { background-color: #2a1a1a; color: #8B1A1A; }
+
+    /* șterge .action-btn, .action-btn:hover, .btn-edit, .btn-edit:hover și pune: */
+.btn-edit {
+    background: linear-gradient(135deg, #B20000, #8B0000);
+    color: white; font-size: 11px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    padding: 14px 36px; border-radius: 6px; text-decoration: none;
+    display: inline-block; transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(178,0,0,0.4); text-align: center;
+}
+.btn-edit:hover { background: linear-gradient(135deg, #CC0000, #990000); color: white; transform: scale(1.05); }
+.btn-back {
+    position: relative; overflow: hidden;
+    background: transparent; border: 1px solid #2a2a2a; color: #aaa;
+    font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    padding: 14px 36px; border-radius: 6px; text-decoration: none;
+    display: inline-block; transition: color 0.3s, border-color 0.3s; text-align: center;
+}
+.btn-back::before { content: ''; position: absolute; inset: 0; background: #1e1e1e; transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease; z-index: 0; }
+.btn-back:hover::before { transform: scaleX(1); }
+.btn-back:hover { color: white; border-color: #3a3a3a; }
+.btn-back span { position: relative; z-index: 1; }
+.form-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+    
+   
+</style>
+}
+
+<div class="container">
+    <div class="page-header">
+        <h1>Promotion Details</h1>
+        <p>Database — Promotion #@Model.Id</p>
+    </div>
+
+    <hr class="section-divider">
+
+    <div class="details-card">
+
+        <div class="promo-hero">
+            <span class="emoji">@Model.Emoji</span>
+            <div class="title">@Model.Title</div>
+        </div>
+
+        <div class="info-row">
+            <span class="info-label">Description</span>
+            <span class="info-value desc">@Model.Description</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Discount</span>
+            <span class="info-value">@Model.DiscountPercent%</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Valid From</span>
+            <span class="info-value">@Model.ValidFrom.ToString("dd MMM yyyy")</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Valid Until</span>
+            <span class="info-value">@Model.ValidUntil.ToString("dd MMM yyyy")</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Status</span>
+            <span class="info-value">
+                @if (Model.IsActive)
+                {
+                    <span class="badge-status badge-active">Active</span>
+                }
+                else
+                {
+                    <span class="badge-status badge-inactive">Inactive</span>
+                }
+            </span>
+        </div>
+
+        <div class="form-actions">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-edit">Edit</a>
+    <a asp-action="Index" class="btn-back"><span>← Back to List</span></a>
+</div>
+
+    </div>
+</div>

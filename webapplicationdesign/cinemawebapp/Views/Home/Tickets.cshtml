@@ -1,0 +1,641 @@
+@model IEnumerable<cinemawebapp.Models.Screening>
+@{
+    ViewData["Title"] = "Tickets";
+    var cinemas = ViewBag.Cinemas as IEnumerable<cinemawebapp.Models.Cinema> ?? Enumerable.Empty<cinemawebapp.Models.Cinema>();
+    // Parametri pre-selectați veniți din Schedule sau Movies
+    var preScreeningId = (int?)ViewBag.PreScreeningId;
+}
+
+@section Styles {
+<style>
+.form-wrapper { max-width: 680px; margin: 0 auto; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+.field-float {
+    position: relative;
+    background: #0c0c0c;
+    border: 1px solid #222;
+    border-radius: 10px;
+    padding: 22px 20px 10px;
+    transition: border-color 0.35s ease, box-shadow 0.35s ease;
+    overflow: hidden;
+}
+.field-float::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%;
+    height: 2px; width: 0;
+    background: linear-gradient(to right, #7a0000, #ff3333, #7a0000);
+    transform: translateX(-50%);
+    transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 2px;
+}
+.field-float:focus-within { border-color: #2a2a2a; box-shadow: 0 12px 40px rgba(178,0,0,0.12), 0 2px 12px rgba(0,0,0,0.5); }
+.field-float:focus-within::after { width: 100%; }
+.field-float label {
+    position: absolute;
+    top: 50%; left: 20px;
+    transform: translateY(-50%);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #aaa;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.field-float:focus-within label,
+.field-float.has-value label {
+    top: 14px;
+    transform: translateY(0);
+    font-size: 8px;
+    letter-spacing: 4px;
+    color: #8B1A1A;
+}
+.field-float select {
+    background: transparent !important;
+    color: white !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    width: 100%;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 0;
+    margin-top: 4px;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+.field-float select:disabled { opacity: 0.4; cursor: not-allowed; }
+.field-float select option { background-color: #111; color: white; }
+.select-wrapper { position: relative; }
+.select-wrapper::after {
+    content: '›';
+    position: absolute;
+    right: 0; top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    color: #444; font-size: 18px;
+    pointer-events: none; transition: color 0.3s;
+}
+.field-float:focus-within .select-wrapper::after { color: #8B1A1A; }
+
+.section-divider { height: 1px; background: linear-gradient(to right, transparent, #333, transparent); border: none; margin: 40px 0; }
+
+/* INFO BAR */
+.info-bar {
+    background: #0f0f0f;
+    border: 1px solid #1e1e1e;
+    border-radius: 10px;
+    padding: 20px 28px;
+    margin: 0 auto 32px auto;
+    max-width: 680px;
+    display: none;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.info-bar.visible { display: flex; }
+.info-bar-item { font-size: 11px; letter-spacing: 2px; color: #555; text-transform: uppercase; }
+.info-bar-item strong { color: white; display: block; font-size: 13px; margin-top: 4px; letter-spacing: 1px; }
+
+/* TICKET TYPE */
+.ticket-type-section { max-width: 680px; margin: 0 auto 32px auto; }
+.ticket-type-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #aaa;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+}
+.ticket-type-btn {
+    background: #0f0f0f;
+    border: 1px solid #2a2a2a;
+    color: #ccc;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+}
+.ticket-type-btn:hover { border-color: #B20000; color: white; }
+.ticket-type-btn.active {
+    background: linear-gradient(135deg, #B20000, #8B0000);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 4px 16px rgba(178,0,0,0.4);
+}
+
+/* SEAT MAP */
+.seats-wrapper { max-width: 1000px; margin: 0 auto; }
+.seats-title { text-align: center; font-weight: bold; text-transform: uppercase; letter-spacing: 4px; font-size: 13px; color: #ccc; margin-bottom: 24px; }
+#seat-map { background-color: #141414; border-radius: 12px; padding: 30px 20px; border: 1px solid #2a2a2a; }
+.screen-bar { background: linear-gradient(to bottom, #ffffff, #aaaaaa); height: 6px; border-radius: 50%; margin: 0 100px 12px 100px; box-shadow: 0 0 30px rgba(255,255,255,0.5); }
+.screen-label { text-align: center; color: #666; font-size: 11px; letter-spacing: 5px; margin-bottom: 36px; text-transform: uppercase; }
+.seat-row { display: flex; justify-content: center; margin-bottom: 6px; align-items: center; }
+.seat-label { margin-right: 12px; width: 20px; text-align: right; line-height: 36px; font-weight: bold; font-size: 12px; color: #555; letter-spacing: 1px; flex-shrink: 0; }
+.seat {
+    width: 36px; height: 36px; margin: 3px;
+    background-color: #2a2a2a;
+    color: #888;
+    border-radius: 6px 6px 4px 4px;
+    border: 1px solid #3a3a3a;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+}
+.seat:hover:not(.taken):not(.selected) { background-color: #4a1010; border-color: #8B1A1A; color: white; }
+.seat.selected { background-color: #8B1A1A; border-color: #ff3333; color: white; box-shadow: 0 2px 8px rgba(178,0,0,0.5); }
+.seat.taken { background-color: #1a1a1a; border-color: #222; color: #333; cursor: not-allowed; }
+.seat.max-reached:not(.selected):not(.taken) { opacity: 0.4; cursor: not-allowed; }
+
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #888; letter-spacing: 1px; text-transform: uppercase; }
+.legend-dot { width: 16px; height: 16px; border-radius: 4px; display: inline-block; }
+#seat-info { text-align: center; font-size: 13px; color: #888; letter-spacing: 2px; text-transform: uppercase; font-weight: bold; }
+
+.max-warning {
+    text-align: center;
+    color: #8B1A1A;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 10px;
+    min-height: 18px;
+}
+
+.btn-confirm {
+    background: linear-gradient(135deg, #B20000, #8B0000);
+    border: none; color: white; font-weight: 900;
+    letter-spacing: 3px; padding: 14px 60px; font-size: 13px;
+    border-radius: 6px; text-transform: uppercase;
+    box-shadow: 0 6px 15px rgba(178,0,0,0.5);
+    transition: all 0.4s ease; cursor: pointer; font-family: inherit;
+}
+.btn-confirm:hover { background: linear-gradient(135deg, #CC0000, #990000); box-shadow: 0 8px 28px rgba(204,0,0,0.7); transform: scale(1.05); color: white; }
+.btn-confirm:disabled { background: #1a1a1a; border: 1px solid #2a2a2a; color: #444; box-shadow: none; cursor: not-allowed; transform: none; }
+
+.btn-deselect {
+    background: transparent; border: 1px solid #2a2a2a;
+    color: #555; font-weight: 700; font-size: 10px; letter-spacing: 3px;
+    text-transform: uppercase; padding: 8px 24px; border-radius: 6px;
+    cursor: pointer; outline: none; font-family: inherit;
+    transition: color 0.35s ease, border-color 0.35s ease, transform 0.3s ease;
+}
+.btn-deselect:hover { color: #aaa; border-color: #444; transform: translateY(-2px); }
+
+#confirm-summary { text-align: center; font-size: 12px; letter-spacing: 2px; color: #cc2222; margin-bottom: 16px; min-height: 20px; text-transform: uppercase; font-weight: 700; }
+</style>
+}
+
+<div class="container mt-5 mb-5">
+    <h1 class="mb-2 fw-bold text-uppercase text-center" style="letter-spacing:4px;">Ticket Reservation</h1>
+    <p class="text-center mb-5" style="color:#aaa; font-size:12px; letter-spacing:3px; text-transform:uppercase;">Select your preferences below</p>
+
+    <!-- INFO BAR -->
+    <div class="info-bar" id="info-bar">
+        <div class="info-bar-item">Movie <strong id="ib-movie">—</strong></div>
+        <div class="info-bar-item">Cinema <strong id="ib-cinema">—</strong></div>
+        <div class="info-bar-item">Hall <strong id="ib-hall">—</strong></div>
+        <div class="info-bar-item">Date &amp; Time <strong id="ib-datetime">—</strong></div>
+    </div>
+
+    <!-- FORM -->
+    <div class="form-wrapper">
+        <div class="form-grid">
+
+            <div class="field-float" id="ff-cinema">
+                <label>Cinema</label>
+                <div class="select-wrapper">
+                    <select id="cinema-select" onchange="onCinemaChange(this)">
+                        <option value=""></option>
+                        @foreach (var c in cinemas)
+                        {
+                            <option value="@c.Id">@c.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="field-float" id="ff-movie">
+                <label>Movie</label>
+                <div class="select-wrapper">
+                    <select id="movie-select" onchange="onMovieChange(this)" disabled>
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field-float" id="ff-date">
+                <label>Date</label>
+                <div class="select-wrapper">
+                    <select id="date-select" onchange="onDateChange(this)" disabled>
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field-float" id="ff-time">
+                <label>Time</label>
+                <div class="select-wrapper">
+                    <select id="time-select" onchange="onScreeningSelect(this)" disabled>
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TICKET TYPE -->
+    @{
+    var ticketTypes = ViewBag.TicketTypes as IEnumerable<cinemawebapp.Models.TicketType>
+                     ?? Enumerable.Empty<cinemawebapp.Models.TicketType>();
+}
+<div class="ticket-type-section">
+    <div class="ticket-type-label">Ticket Type</div>
+    <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:12px;">
+        @foreach (var tt in ticketTypes)
+        {
+            var label = (tt.Emoji != null ? tt.Emoji + " " : "") + tt.Name + " — " + tt.Price.ToString("0") + " RON";
+            var onclick = $"selectType(this,'{tt.Name}',{tt.Price},{tt.MinSeats},{tt.MaxSeats},'{tt.DayRestriction ?? ""}')";
+            var isFirst = tt == ticketTypes.First();
+            <button class="ticket-type-btn @(isFirst ? "active" : "")" onclick="@onclick">@label</button>
+        }
+    </div>
+    <p id="type-restriction" style="font-size:11px;letter-spacing:2px;color:#8B1A1A;text-transform:uppercase;margin-top:10px;min-height:16px;"></p>
+</div>
+
+    <hr class="section-divider">
+
+    <!-- SEAT MAP -->
+    <div class="seats-wrapper">
+        <div class="seats-title">Select Seats <span style="color:#555; font-size:11px; letter-spacing:2px;">(max 5)</span></div>
+        <div id="seat-map" class="mb-4">
+            <div class="screen-bar"></div>
+            <div class="screen-label">screen</div>
+            <div id="rows-container"></div>
+        </div>
+
+        <div class="d-flex justify-content-center gap-5 mb-3">
+            <div class="legend-item"><span class="legend-dot" style="background:#2a2a2a;border:1px solid #3a3a3a;"></span>Free</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#8B1A1A;"></span>Selected</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#1a1a1a;border:1px solid #222;"></span>Taken</div>
+        </div>
+
+        <p id="seat-info" class="mt-3 mb-1"></p>
+        <p class="max-warning" id="max-warning"></p>
+
+        <div class="d-flex justify-content-center mt-3">
+            <button type="button" class="btn-deselect" onclick="deselectAll()"><span>✕ Deselect All</span></button>
+        </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <div id="confirm-summary"></div>
+
+    <form method="post" action="@Url.Action("ConfirmTickets", "Home")" class="d-flex justify-content-center mt-2 mb-3">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="screeningId"  id="input-screeningId" value="" />
+        <input type="hidden" name="seatNumbers"  id="input-seatNumbers" value="" />
+        <input type="hidden" name="ticketType"   id="input-ticketType"  value="Standard" />
+        <input type="hidden" name="price"        id="input-price"       value="25" />
+        <button type="submit" class="btn-confirm" id="confirmBtn" disabled>Confirm Reservation</button>
+    </form>
+</div>
+
+@section Scripts {
+<script>
+    const allScreenings = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+        Model.Select(s => new {
+            id         = s.Id,
+            movieTitle = s.Movie.Title,
+            cinemaId   = s.Hall.CinemaId,
+            cinemaName = s.Hall.Cinema.Name,
+            hallName   = s.Hall.Name,
+            capacity   = s.Hall.Capacity,
+            dateLabel  = s.StartTime.ToString("dd MMM yyyy"),
+            timeLabel  = s.StartTime.ToString("HH:mm")
+        })
+    ));
+
+    const takenSeatsMap = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+        ViewBag.TakenSeatsMap as Dictionary<int, List<string>> ?? new Dictionary<int, List<string>>()
+    ));
+
+    const MAX_SEATS = 5;
+    let selectedType    = 'Standard';
+    let selectedPrice   = 25;
+    let selectedSeats   = [];   // array — max 5
+    let currentScreeningId = null;
+    let currentCapacity = 96;
+
+    // ── PRE-SELECTARE din Schedule / Movies ──────────────────────────────
+    const preScreeningId = @(preScreeningId.HasValue ? preScreeningId.Value.ToString() : "null");
+
+    window.addEventListener('DOMContentLoaded', () => {
+        buildSeats([], 96);
+        const preTicketType = '@(ViewBag.PreTicketType as string ?? "")';
+if (preTicketType) {
+    document.querySelectorAll('.ticket-type-btn').forEach(btn => {
+        if (btn.textContent.includes(preTicketType)) btn.click();
+    });
+}
+        updateSeatInfo();
+
+        if (preScreeningId) {
+            const s = allScreenings.find(x => x.id === preScreeningId);
+            if (!s) return;
+
+            // Setează Cinema
+            const cinSel = document.getElementById('cinema-select');
+            cinSel.value = s.cinemaId;
+            setVal('ff-cinema', true);
+            populateMovies(s.cinemaId);
+
+            // Setează Movie
+            const movSel = document.getElementById('movie-select');
+            movSel.value = s.movieTitle;
+            setVal('ff-movie', true);
+            populateDates(s.cinemaId, s.movieTitle);
+
+            // Setează Date
+            const datSel = document.getElementById('date-select');
+            datSel.value = s.dateLabel;
+            setVal('ff-date', true);
+            populateTimes(s.cinemaId, s.movieTitle, s.dateLabel);
+
+            // Setează Time
+            const timSel = document.getElementById('time-select');
+            timSel.value = preScreeningId;
+            setVal('ff-time', true);
+            applyScreening(preScreeningId);
+        }
+    });
+
+    // ── HELPERS ──────────────────────────────────────────────────────────
+    function setVal(id, hasValue) {
+        document.getElementById(id).classList.toggle('has-value', hasValue);
+    }
+
+    function populateMovies(cinemaId) {
+        const sel = document.getElementById('movie-select');
+        sel.innerHTML = '<option value=""></option>';
+        const movies = [...new Set(
+            allScreenings.filter(s => s.cinemaId === cinemaId).map(s => s.movieTitle)
+        )];
+        movies.forEach(m => {
+            const o = document.createElement('option');
+            o.value = m; o.textContent = m;
+            sel.appendChild(o);
+        });
+        sel.disabled = false;
+    }
+
+    function populateDates(cinemaId, movie) {
+        const sel = document.getElementById('date-select');
+        sel.innerHTML = '<option value=""></option>';
+        const dates = [...new Set(
+            allScreenings.filter(s => s.cinemaId === cinemaId && s.movieTitle === movie).map(s => s.dateLabel)
+        )];
+        dates.forEach(d => {
+            const o = document.createElement('option');
+            o.value = d; o.textContent = d;
+            sel.appendChild(o);
+        });
+        sel.disabled = false;
+    }
+
+    function populateTimes(cinemaId, movie, date) {
+        const sel = document.getElementById('time-select');
+        sel.innerHTML = '<option value=""></option>';
+        allScreenings
+            .filter(s => s.cinemaId === cinemaId && s.movieTitle === movie && s.dateLabel === date)
+            .forEach(s => {
+                const o = document.createElement('option');
+                o.value = s.id; o.textContent = s.timeLabel;
+                sel.appendChild(o);
+            });
+        sel.disabled = false;
+    }
+
+    function applyScreening(id) {
+        id = parseInt(id);
+        currentScreeningId = id;
+        const s = allScreenings.find(x => x.id === id);
+        currentCapacity = s.capacity;
+
+        document.getElementById('ib-movie').textContent    = s.movieTitle;
+        document.getElementById('ib-cinema').textContent   = s.cinemaName;
+        document.getElementById('ib-hall').textContent     = s.hallName;
+        document.getElementById('ib-datetime').textContent = s.dateLabel + ' · ' + s.timeLabel;
+        document.getElementById('info-bar').classList.add('visible');
+        document.getElementById('input-screeningId').value = id;
+
+        selectedSeats = [];
+        buildSeats(takenSeatsMap[id] || [], s.capacity);
+        updateConfirmBtn();
+    }
+
+    // ── EVENT HANDLERS ───────────────────────────────────────────────────
+    function onCinemaChange(sel) {
+        setVal('ff-cinema', !!sel.value);
+        resetFrom('movie');
+        if (!sel.value) return;
+        populateMovies(parseInt(sel.value));
+    }
+
+    function onMovieChange(sel) {
+        setVal('ff-movie', !!sel.value);
+        resetFrom('date');
+        if (!sel.value) return;
+        const cinemaId = parseInt(document.getElementById('cinema-select').value);
+        populateDates(cinemaId, sel.value);
+    }
+
+    function onDateChange(sel) {
+        setVal('ff-date', !!sel.value);
+        resetFrom('time');
+        if (!sel.value) return;
+        const cinemaId = parseInt(document.getElementById('cinema-select').value);
+        const movie    = document.getElementById('movie-select').value;
+        populateTimes(cinemaId, movie, sel.value);
+    }
+
+    function onScreeningSelect(sel) {
+        setVal('ff-time', !!sel.value);
+        if (!sel.value) { clearInfoBar(); return; }
+        applyScreening(sel.value);
+    }
+
+    function resetFrom(level) {
+        const levels = ['movie', 'date', 'time'];
+        const idx = levels.indexOf(level);
+        levels.slice(idx).forEach(l => {
+            const sel = document.getElementById(l + '-select');
+            sel.innerHTML = '<option value=""></option>';
+            sel.disabled = true;
+            setVal('ff-' + l, false);
+        });
+        clearInfoBar();
+    }
+
+    function clearInfoBar() {
+        document.getElementById('info-bar').classList.remove('visible');
+        currentScreeningId = null;
+        selectedSeats = [];
+        document.getElementById('input-screeningId').value = '';
+        document.getElementById('input-seatNumbers').value  = '';
+        document.getElementById('confirmBtn').disabled = true;
+        document.getElementById('confirm-summary').textContent = '';
+        buildSeats([], currentCapacity);
+    }
+
+    // ── SEAT MAP ─────────────────────────────────────────────────────────
+    function buildSeats(takenSeats, capacity) {
+        currentCapacity = capacity;
+        selectedSeats   = [];
+        const container = document.getElementById('rows-container');
+        container.innerHTML = '';
+        updateSeatInfo();
+
+        const seatsPerRow = 16;
+        const totalRows   = Math.ceil(capacity / seatsPerRow);
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').slice(0, totalRows).forEach(letter => {
+            const row = document.createElement('div');
+            row.className = 'seat-row';
+            const lbl = document.createElement('span');
+            lbl.className = 'seat-label';
+            lbl.textContent = letter;
+            row.appendChild(lbl);
+
+            for (let i = 1; i <= seatsPerRow; i++) {
+                const seatId = letter + i;
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'seat' + (takenSeats.includes(seatId) ? ' taken' : '');
+                btn.textContent = i;
+                btn.dataset.seat = seatId;
+
+                if (!takenSeats.includes(seatId)) {
+                    btn.addEventListener('click', () => toggleSeat(btn, seatId, takenSeats, capacity));
+                }
+                row.appendChild(btn);
+            }
+            container.appendChild(row);
+        });
+    }
+
+    function toggleSeat(btn, seatId, takenSeats, capacity) {
+        if (btn.classList.contains('selected')) {
+            // Deselect
+            btn.classList.remove('selected');
+            selectedSeats = selectedSeats.filter(s => s !== seatId);
+        } else {
+            // Select — max 5
+            if (selectedSeats.length >= currentMaxSeats) {
+                document.getElementById('max-warning').textContent = `Maximum ${currentMaxSeats} seat(s) for this ticket type.`;
+                setTimeout(() => document.getElementById('max-warning').textContent = '', 2500);
+                return;
+            }
+            btn.classList.add('selected');
+            selectedSeats.push(seatId);
+        }
+        updateSeatInfo();
+        updateConfirmBtn();
+        // Aplică clasa max-reached la scaunele libere rămase
+        const maxHit = selectedSeats.length >= MAX_SEATS;
+        document.querySelectorAll('.seat:not(.taken):not(.selected)').forEach(s => {
+            s.classList.toggle('max-reached', maxHit);
+        });
+    }
+
+    function updateSeatInfo() {
+        const taken  = document.querySelectorAll('.seat.taken').length;
+        const selCnt = selectedSeats.length;
+        const free   = currentCapacity - taken - selCnt;
+        document.getElementById('seat-info').textContent =
+            `Selected: ${selCnt}  |  Free: ${free}  |  Taken: ${taken}`;
+    }
+
+    function deselectAll() {
+        document.querySelectorAll('.seat.selected').forEach(s => {
+            s.classList.remove('selected', 'max-reached');
+        });
+        document.querySelectorAll('.seat.max-reached').forEach(s => s.classList.remove('max-reached'));
+        selectedSeats = [];
+        updateSeatInfo();
+        updateConfirmBtn();
+    }
+
+    // ── TICKET TYPE ───────────────────────────────────────────────────────
+    let currentMinSeats = 1;
+    let currentMaxSeats = 5;
+
+    function selectType(btn, type, price, minSeats, maxSeats, dayRestriction) {
+    if (dayRestriction && currentScreeningId) {
+        const s = allScreenings.find(x => x.id === currentScreeningId);
+        const d = new Date(s.dateLabel).getDay();
+        const dayMap = { 'Friday': 5, 'Wednesday': 3 };
+        if (dayMap[dayRestriction] !== undefined && d !== dayMap[dayRestriction]) {
+            document.getElementById('type-restriction').textContent = `${type} is only available on ${dayRestriction}s.`;
+            return;
+        }
+    }
+    document.getElementById('type-restriction').textContent = '';
+    document.querySelectorAll('.ticket-type-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedType    = type;
+    selectedPrice   = price;
+    currentMinSeats = minSeats;
+    currentMaxSeats = maxSeats;
+    document.getElementById('input-ticketType').value = type;
+    document.getElementById('input-price').value      = price;
+    deselectAll();
+    updateConfirmBtn();
+}
+
+    // ── CONFIRM ───────────────────────────────────────────────────────────
+    function updateConfirmBtn() {
+        const btn = document.getElementById('confirmBtn');
+        const sum = document.getElementById('confirm-summary');
+        const meetsMin = selectedSeats.length >= currentMinSeats;
+        const meetsMax = selectedSeats.length <= currentMaxSeats;
+        if (selectedSeats.length > 0 && currentScreeningId) {
+            if (meetsMin && meetsMax) {
+                btn.disabled = false;
+                // Family Pack & Couples: preț fix total; altele: per seat
+                let total;
+                if (selectedType === 'Family Pack') total = 99;
+else if (selectedType === 'Couples Friday') total = 55;
+else if (selectedType === 'Wednesday 1+1') total = 25;
+else total = selectedSeats.length * selectedPrice;
+                sum.textContent = `Seats ${selectedSeats.join(', ')} · ${selectedType} · ${total} RON`;
+                document.getElementById('input-seatNumbers').value = selectedSeats.join(',');
+            } else {
+                btn.disabled = true;
+                sum.textContent = currentMinSeats === currentMaxSeats
+                    ? `Select exactly ${currentMinSeats} seat(s) for ${selectedType}.`
+                    : `Select between ${currentMinSeats} and ${currentMaxSeats} seats.`;
+                document.getElementById('input-seatNumbers').value = '';
+            }
+        } else {
+            btn.disabled = true;
+            sum.textContent = '';
+            document.getElementById('input-seatNumbers').value = '';
+        }
+    }
+
+    // Init
+    buildSeats([], 96);
+    updateSeatInfo();
+</script>
+}

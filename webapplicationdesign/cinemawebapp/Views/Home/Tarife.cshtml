@@ -1,0 +1,225 @@
+﻿@{
+    ViewData["Title"] = "Tarife";
+}
+
+@section Styles {
+<style>
+    .tarife-card {
+        background-color: #0f0f0f;
+        border: 1px solid #1e1e1e;
+        border-top: 2px solid #8B1A1A;
+        border-radius: 0 0 12px 12px;
+        height: 100%;
+    }
+
+    .tarife-card-header {
+        padding: 24px 28px 0 28px;
+        margin-bottom: 20px;
+    }
+
+    .tarife-card-title {
+    font-size: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #8B1A1A;
+    margin-bottom: 0;
+}
+
+    .tarife-card-body {
+        padding: 0 28px 28px 28px;
+    }
+
+    .price-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 0;
+        border-bottom: 1px solid #1a1a1a;
+    }
+    .price-row:last-child {
+        border-bottom: none;
+    }
+
+    .price-label {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: bold;
+        color: white;
+    }
+
+    .price-value {
+        font-weight: bold;
+        font-size: 13px;
+        color: white;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        white-space: nowrap;
+        margin-left: 16px;
+    }
+
+    .price-note {
+        font-size: 11px;
+        color: #555;
+        margin-top: 4px;
+        text-transform: lowercase;
+        letter-spacing: 0.5px;
+    }
+
+    .section-divider {
+        height: 1px;
+        background: linear-gradient(to right, transparent, #2a2a2a, transparent);
+        border: none;
+        margin: 0 0 50px 0;
+    }
+
+    .footer-note {
+        text-align: center;
+        margin-top: 50px;
+        font-size: 11px;
+        color: #555;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding-top: 30px;
+        border-top: 1px solid #1a1a1a;
+    }
+
+    .footer-note a {
+        color: #8B1A1A;
+        text-decoration: none;
+    }
+
+    .footer-note a:hover {
+        color: white;
+    }
+</style>
+}
+
+<div class="container mt-5 mb-5">
+
+    <h1 class="mb-2 fw-bold text-uppercase text-center" style="letter-spacing:4px;">Pricing</h1>
+    <p class="text-center mb-5" style="color:#aaa; font-size:12px; letter-spacing:3px; text-transform:uppercase;">Transparent rates — no hidden fees</p>
+
+    <hr class="section-divider">
+
+    <div class="row g-4">
+
+        <!-- STANDARD -->
+        <div class="col-md-4">
+            <div class="tarife-card">
+                <div class="tarife-card-header">
+                    <div class="tarife-card-title">Standard Tickets</div>
+                </div>
+                <div class="tarife-card-body">
+                    <div class="price-row">
+                        <div>
+                            <div class="price-label">Adult</div>
+                            <div class="price-note">all screenings, all halls</div>
+                        </div>
+                        <div class="price-value">35 RON</div>
+                    </div>
+                    <div class="price-row">
+                        <div>
+                            <div class="price-label">Student</div>
+                            <div class="price-note">valid student ID required</div>
+                        </div>
+                        <div class="price-value">28 RON</div>
+                    </div>
+                    <div class="price-row">
+                        <div>
+                            <div class="price-label">Child (under 12)</div>
+                            <div class="price-note">accompanied by an adult</div>
+                        </div>
+                        <div class="price-value">20 RON</div>
+                    </div>
+                    <div class="price-row">
+                        <div>
+                            <div class="price-label">Senior (65+)</div>
+                            <div class="price-note">valid ID required</div>
+                        </div>
+                        <div class="price-value">22 RON</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROMOTII -->
+        <div class="col-md-4">
+            <div class="tarife-card">
+                <div class="tarife-card-header">
+                    <div class="tarife-card-title">Promotions & Special Rates</div>
+                </div>
+                <div class="tarife-card-body">
+                    <div class="price-row">
+                        <div>
+                            <div class="price-label">Wednesday 1+1</div>
+                            <div class="price-note">buy one adult ticket, get one free</div>
+                        </div>
+                        <div class="price-value">35 RON</div>
+                    </div>
+                    <div class="price-row">
+                        <div>
+                            <div class="price-label">Couples Friday</div>
+                            <div class="price-note">two tickets, friday evenings only</div>
+                        </div>
+                        <div class="price-value">55 RON</div>
+                    </div>
+                    <div class="price-row">
+                        <div>
+                            <div class="price-label">Family Pack</div>
+                            <div class="price-note">2 adults + 2 children</div>
+                        </div>
+                        <div class="price-value">99 RON</div>
+                    </div>
+                    <div class="price-row">
+                        <div>
+                            <div class="price-label">Veterans Monday</div>
+                            <div class="price-note">free admission, valid ID required</div>
+                        </div>
+                        <div class="price-value">FREE</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CORPORATE -->
+        <div class="col-md-4">
+            <div class="tarife-card">
+                <div class="tarife-card-header">
+                    <div class="tarife-card-title">Corporate & Group Bookings</div>
+                </div>
+                <div class="tarife-card-body">
+                    <div class="price-row">
+                        <div>
+                            <div class="price-label">Group (10+ persons)</div>
+                            <div class="price-note">advance booking required</div>
+                        </div>
+                        <div class="price-value">25 RON / person</div>
+                    </div>
+                    <div class="price-row">
+                        <div>
+                            <div class="price-label">Private Screening</div>
+                            <div class="price-note">full hall, any film from our catalogue</div>
+                        </div>
+                        <div class="price-value">on request</div>
+                    </div>
+                    <div class="price-row">
+                        <div>
+                            <div class="price-label">Corporate Event</div>
+                            <div class="price-note">includes catering options</div>
+                        </div>
+                        <div class="price-value">on request</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer-note">
+        All prices include VAT — for group bookings and corporate enquiries contact us at
+        <a href="mailto:office@thefilmvault.ro">office@thefilmvault.ro</a>
+    </div>
+
+</div>

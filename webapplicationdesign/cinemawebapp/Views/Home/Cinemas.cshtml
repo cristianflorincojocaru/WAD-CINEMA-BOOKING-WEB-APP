@@ -1,0 +1,269 @@
+@model IEnumerable<cinemawebapp.Models.Cinema>
+@{
+    ViewData["Title"] = "Cinemas";
+    var cinemaList = Model.ToList();
+    int total = cinemaList.Count;
+}
+
+@section Styles {
+<style>
+    .cinema-section {
+        display: none;
+        animation: fadeIn 0.4s ease;
+    }
+    .cinema-section.active {
+        display: block;
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(16px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .cinema-title {
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        margin-bottom: 28px;
+        color: white;
+    }
+
+    .cinema-image-wrapper {
+        width: 100%;
+        height: 380px;
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: #141414;
+        border: 1px solid #1e1e1e;
+        margin-bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #333;
+        font-size: 12px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+
+    .cinema-image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .cinema-info-panel {
+        background-color: #0f0f0f;
+        border: 1px solid #1e1e1e;
+        border-top: 2px solid #8B1A1A;
+        border-radius: 0 0 10px 10px;
+        padding: 30px 40px;
+        margin-bottom: 60px;
+    }
+
+    .cinema-details {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+    }
+
+    .detail-block {
+        text-align: left;
+    }
+
+    .detail-label {
+        font-size: 10px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #8B1A1A;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .detail-value {
+        font-size: 13px;
+        color: #aaa;
+        line-height: 1.8;
+        letter-spacing: 0.5px;
+    }
+
+    .nav-arrows {
+        position: fixed;
+        right: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        z-index: 100;
+    }
+
+    .nav-arrow {
+        background: none;
+        border: none;
+        color: #333;
+        font-size: 52px;
+        cursor: pointer;
+        line-height: 1;
+        transition: color 0.2s, text-shadow 0.2s;
+        padding: 0;
+    }
+
+    .nav-arrow:hover {
+        color: #8B1A1A;
+        text-shadow: 0 0 18px rgba(139, 26, 26, 0.85), 0 0 35px rgba(139, 26, 26, 0.4);
+    }
+
+    .cinema-counter {
+        text-align: center;
+        color: #444;
+        font-size: 13px;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        margin-bottom: 30px;
+    }
+
+    .cinema-counter span {
+        color: #8B1A1A;
+        font-weight: bold;
+    }
+
+    .section-divider {
+        height: 1px;
+        background: linear-gradient(to right, transparent, #2a2a2a, transparent);
+        border: none;
+        margin: 0 0 20px 0;
+    }
+
+    .counter-dots {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 40px;
+    }
+
+    .counter-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: #2a2a2a;
+        transition: background-color 0.3s;
+    }
+
+    .counter-dot.active {
+        background-color: #8B1A1A;
+    }
+
+    .btn-manage {
+    position: relative;
+    background: linear-gradient(135deg, #B20000, #8B0000);
+    border: none;
+    color: white;
+    font-weight: 900;
+    letter-spacing: 3px;
+    padding: 8px 22px;
+    font-size: 11px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: 0 6px 15px rgba(178,0,0,0.5);
+    transition: all 0.4s ease;
+    display: inline-block;
+}
+
+.btn-manage:hover {
+    background: linear-gradient(135deg, #CC0000, #990000);
+    box-shadow: 0 8px 28px rgba(204,0,0,0.7);
+    transform: scale(1.05);
+    color: white;
+}
+</style>
+}
+
+<div class="container mt-5 mb-5" style="max-width: 960px;">
+
+    <h1 class="mb-2 fw-bold text-uppercase text-center" style="letter-spacing:4px;">Our Cinemas</h1>
+    <p class="text-center mb-4" style="color:#aaa; font-size:12px; letter-spacing:3px; text-transform:uppercase;">@total locations across Romania</p>
+
+    <hr class="section-divider">
+
+    <div class="text-end mb-3">
+   @if (User.IsInRole("Admin"))
+{
+    <a href="/Cinemas" class="btn-manage">⚙ Manage</a>
+}
+</div>
+
+    <!-- COUNTER -->
+    <div class="cinema-counter">
+        <span id="current-num">1</span> / @total
+    </div>
+
+    <!-- DOTS -->
+    <div class="counter-dots">
+        @for (int i = 1; i <= total; i++)
+        {
+            <div class="counter-dot @(i == 1 ? "active" : "")" id="dot-@i"></div>
+        }
+    </div>
+
+    <!-- CINEMAS DIN DB -->
+    @for (int i = 0; i < cinemaList.Count; i++)
+    {
+        var cinema = cinemaList[i];
+        var num = i + 1;
+        <div class="cinema-section @(i == 0 ? "active" : "")" id="cinema-@num">
+            <div class="cinema-title">@cinema.Name</div>
+            <div class="cinema-image-wrapper">
+                <img src="@cinema.ImagePath" alt="@cinema.Name"
+     onerror="this.style.display='none'; this.parentElement.innerText='[ CINEMA PHOTO ]'">
+            </div>
+            <div class="cinema-info-panel">
+                <div class="cinema-details">
+                    <div class="detail-block">
+                        <div class="detail-label">City</div>
+                        <div class="detail-value">@cinema.City</div>
+                    </div>
+                    <div class="detail-block">
+                        <div class="detail-label">Address</div>
+                        <div class="detail-value">@cinema.Address</div>
+                    </div>
+                    <div class="detail-block">
+                        <div class="detail-label">Opening Hours</div>
+                        <div class="detail-value">@cinema.OpeningHours</div>
+                    </div>
+                    <div class="detail-block">
+                        <div class="detail-label">Contact</div>
+                        <div class="detail-value">@cinema.Contact</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+<!-- SAGETI NAVIGARE -->
+<div class="nav-arrows">
+    <button class="nav-arrow" onclick="navigate(-1)">&#8249;</button>
+    <button class="nav-arrow" onclick="navigate(1)">&#8250;</button>
+</div>
+
+@section Scripts {
+<script>
+    let current = 1;
+    const total = @total;
+
+    function navigate(dir) {
+        document.getElementById('cinema-' + current).classList.remove('active');
+        document.getElementById('dot-' + current).classList.remove('active');
+        current += dir;
+        if (current < 1) current = total;
+        if (current > total) current = 1;
+        document.getElementById('cinema-' + current).classList.add('active');
+        document.getElementById('dot-' + current).classList.add('active');
+        document.getElementById('current-num').textContent = current;
+    }
+</script>
+}

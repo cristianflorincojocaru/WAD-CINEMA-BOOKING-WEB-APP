@@ -1,0 +1,254 @@
+@model IEnumerable<cinemawebapp.Models.Ticket>
+@{
+    ViewData["Title"] = "Profile";
+}
+
+@section Styles {
+<style>
+    .profile-section-title {
+        font-size: 10px;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: #8B1A1A;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .profile-card {
+        background-color: #0f0f0f;
+        border: 1px solid #1e1e1e;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .profile-card-header {
+        background-color: #141414;
+        border-bottom: 1px solid #1e1e1e;
+        padding: 20px 28px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .profile-card-header-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: #8B1A1A;
+    }
+
+    .profile-card-header-title {
+        font-size: 11px;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: white;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .profile-card-body {
+        padding: 28px;
+    }
+
+    .info-row {
+        margin-bottom: 20px;
+    }
+
+    .info-label {
+        font-size: 10px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #555;
+        margin-bottom: 6px;
+    }
+
+    .info-value {
+        font-size: 15px;
+        color: #ccc;
+        letter-spacing: 1px;
+    }
+
+    .logout-btn {
+        display: block;
+        width: 100%;
+        margin-top: 28px;
+        padding: 12px;
+        background: transparent;
+        border: 2px solid #3a3a3a;
+        border-radius: 8px;
+        color: #555;
+        font-size: 10px;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        text-align: center;
+        text-decoration: none;
+        font-weight: 900;
+        overflow: hidden;
+        position: relative;
+        transition: color 0.35s ease, border-color 0.35s ease, transform 0.3s ease;
+        cursor: pointer;
+        font-family: inherit;
+    }
+    .logout-btn::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, #1a0000, #0f0f0f);
+        transform: translateX(-101%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 0;
+    }
+    .logout-btn span { position: relative; z-index: 1; }
+    .logout-btn:hover {
+        color: #cc2222;
+        border-color: #cc2222;
+        transform: translateY(-2px);
+    }
+    .logout-btn:hover::before { transform: translateX(0); }
+
+    /* TABLE */
+    .history-table { width: 100%; border-collapse: collapse; }
+    .history-table thead tr { border-bottom: 1px solid #8B1A1A; }
+    .history-table thead th {
+        font-size: 10px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #555;
+        padding: 12px 16px;
+        font-weight: bold;
+    }
+    .history-table tbody tr {
+        border-bottom: 1px solid #1a1a1a;
+        transition: background-color 0.2s;
+    }
+    .history-table tbody tr:hover { background-color: #141414; }
+    .history-table tbody tr:last-child { border-bottom: none; }
+    .history-table tbody td {
+        padding: 14px 16px;
+        font-size: 13px;
+        color: #aaa;
+        letter-spacing: 1px;
+    }
+    .history-table tbody td:first-child { color: white; font-weight: bold; }
+
+    .section-divider {
+        height: 1px;
+        background: linear-gradient(to right, transparent, #2a2a2a, transparent);
+        border: none;
+        margin: 0 0 40px 0;
+    }
+
+    .empty-history {
+        text-align: center;
+        padding: 40px 20px;
+        color: #444;
+        font-size: 11px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+
+    .ticket-badge {
+        background: linear-gradient(135deg, #B20000, #8B0000);
+        color: white;
+        font-size: 9px;
+        font-weight: 900;
+        letter-spacing: 1px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        text-transform: uppercase;
+    }
+</style>
+}
+
+<div class="container mt-5 mb-5">
+
+    <h1 class="mb-2 fw-bold text-uppercase text-center" style="letter-spacing:4px;">My Profile</h1>
+    <p class="text-center mb-5" style="color:#aaa; font-size:12px; letter-spacing:3px; text-transform:uppercase;">Account Overview</p>
+
+    <hr class="section-divider">
+
+    <div class="row g-4">
+
+        <!-- USER INFO -->
+        <div class="col-md-4">
+            <div class="profile-card">
+                <div class="profile-card-header">
+                    <div class="profile-card-header-dot"></div>
+                    <p class="profile-card-header-title">User Information</p>
+                </div>
+                <div class="profile-card-body">
+
+                    <div class="info-row">
+                        <div class="info-label">Username</div>
+                        <div class="info-value">@User.Identity!.Name</div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-label">Email</div>
+                        <div class="info-value">@User.Identity!.Name</div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-label">Tickets purchased</div>
+                        <div class="info-value">@Model.Count()</div>
+                    </div>
+
+                    <!-- Logout form -->
+                    <form method="post" action="/Identity/Account/Logout">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="returnUrl" value="/" />
+                        <button type="submit" class="logout-btn"><span>← Logout</span></button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- TICKET HISTORY -->
+        <div class="col-md-8">
+            <div class="profile-card">
+                <div class="profile-card-header">
+                    <div class="profile-card-header-dot"></div>
+                    <p class="profile-card-header-title">Ticket History</p>
+                </div>
+                <div class="profile-card-body" style="padding: 0;">
+                    @if (!Model.Any())
+                    {
+                        <div class="empty-history">
+                            No tickets purchased yet —
+                            <a href="@Url.Action("Program", "Home")" style="color:#B20000; text-decoration:none;">browse screenings →</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Movie</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Hall</th>
+                                    <th>#</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var t in Model)
+                                {
+                                    <tr>
+                                        <td>@t.Screening.Movie.Title</td>
+                                        <td>@t.Screening.StartTime.ToString("dd MMM yyyy")</td>
+                                        <td>@t.Screening.StartTime.ToString("HH:mm")</td>
+                                        <td>@t.Screening.Hall.Name</td>
+                                        <td><span style="color:white;font-weight:700;letter-spacing:1px;">@t.SeatNumber</span></td>
+                                        <td><span class="ticket-badge">#@t.Id</span></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

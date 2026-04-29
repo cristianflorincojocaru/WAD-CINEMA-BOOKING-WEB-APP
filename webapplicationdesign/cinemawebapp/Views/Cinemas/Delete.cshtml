@@ -1,0 +1,37 @@
+﻿@model cinemawebapp.Models.Cinema
+
+@{
+    ViewData["Title"] = "Delete Cinema";
+}
+
+<div class="container mt-5 mb-5" style="max-width:700px;">
+    <h1 class="mb-2 fw-bold text-uppercase text-center" style="letter-spacing:4px;">Delete Cinema</h1>
+    <p class="text-center mb-5" style="color:#aaa; font-size:12px; letter-spacing:3px; text-transform:uppercase;">This action cannot be undone</p>
+
+    <div style="background-color:#0f0f0f; border:1px solid #1e1e1e; border-top:2px solid #8B1A1A; border-radius:0 0 12px 12px; padding:40px;">
+
+        <div style="margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid #1a1a1a;">
+            <div style="font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#8B1A1A; margin-bottom:6px;">Name</div>
+            <div style="color:#ccc; font-size:14px;">@Model.Name</div>
+        </div>
+        <div style="margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid #1a1a1a;">
+            <div style="font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#8B1A1A; margin-bottom:6px;">City</div>
+            <div style="color:#ccc; font-size:14px;">@Model.City</div>
+        </div>
+        <div style="margin-bottom:30px;">
+            <div style="font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#8B1A1A; margin-bottom:6px;">Contact</div>
+            <div style="color:#ccc; font-size:14px;">@Model.Contact</div>
+        </div>
+
+        <form asp-action="Delete">
+            <input asp-for="Id" type="hidden" />
+            <div class="d-flex gap-3">
+                <button type="submit" class="btn fw-bold text-uppercase"
+                        style="background-color:#8B1A1A; color:white; letter-spacing:2px; font-size:11px; padding:10px 30px;">
+                    Confirm Delete
+                </button>
+                <a href="/Cinemas" style="color:#555; font-size:11px; letter-spacing:2px; text-decoration:none; text-transform:uppercase; display:flex; align-items:center;">← Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
