@@ -1,4 +1,4 @@
-# WEB APPLICATION DESIGN - CINEMA BOOKING PLATFORM
+# Web Application Design - CINEMA BOOKING PLATFORM
 
 <div align="center">
 
