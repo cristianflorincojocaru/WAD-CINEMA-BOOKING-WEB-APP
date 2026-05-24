@@ -179,7 +179,7 @@ ApplicationUser (managed via ASP.NET Identity)
 
 ### PAGES
 
-| Route | Description |
+| ROUTE | DESCRIPTION |
 |---|---|
 | `/` | Home — Now Showing + Coming Soon |
 | `/Account/Login` | Login |
@@ -203,7 +203,7 @@ ApplicationUser (managed via ASP.NET Identity)
 
 ## DESIGN PATTERNS
 
-| Pattern | Implementation |
+| PATTERN | IMPLEMENTATION |
 |---|---|
 | **Repository Pattern** | `Repositories/` — one repository per entity, each implementing its interface from `Repositories/Interfaces/` |
 | **Service Layer** | `Services/` — business logic abstracted from controllers, each implementing its interface from `Services/Interfaces/` |
@@ -255,7 +255,7 @@ If you hit migration conflicts:
 
 ## TECH STACK
 
-| Layer | Technology |
+| LAYER | TECHNOLOGY |
 |---|---|
 | Framework | ASP.NET Core MVC (.NET 10) |
 | ORM | Entity Framework Core |
