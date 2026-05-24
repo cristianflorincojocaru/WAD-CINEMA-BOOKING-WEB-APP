@@ -14,15 +14,15 @@
 
 ---
 
-## 📋 Overview
+## OVERVIEW
 
-**The Film Vault** is a full-stack cinema management and ticket booking system built as an academic project. It supports browsing movies, managing screenings, purchasing tickets, handling promotions, and administering cinema halls — all wrapped in a **cinematic dark-themed UI** with red accents and premium animations.
+**THE FILM VAULT** is a full-stack cinema management and ticket booking system built as an academic project. It supports browsing movies, managing screenings, purchasing tickets, handling promotions, and administering cinema halls — all wrapped in a **cinematic dark-themed UI** with red accents and premium animations.
 
 The project repository is named `cinemawebapp`.
 
 ---
 
-## 🏗️ Architecture
+## ARCHITECTURE
 
 ```
 cinemawebapp/
@@ -96,9 +96,9 @@ cinemawebapp/
 
 ---
 
-## 🗄️ Database Schema
+## DATABASE SCHEMA
 
-### Entities
+### ENTITIES
 
 | Entity | Key Fields |
 |---|---|
@@ -111,7 +111,7 @@ cinemawebapp/
 | `TicketType` | `Id`, `Name`, `Discount` |
 | `Promotion` | `Id`, `Title`, `Description`, `ValidFrom`, `ValidTo` |
 
-### Relationships
+### RELATIONSHIPS
 
 ```
 Cinema ──< Hall ──< Screening >── Movie
@@ -123,54 +123,54 @@ ApplicationUser (managed via ASP.NET Identity)
 
 ---
 
-## ⚙️ Features
+## FEATURES
 
-### 🔐 Account
+### 🔐 ACCOUNT
 - Register / Login / Logout via `AccountController`
 - `LoginViewModel` and `RegisterViewModel` for form binding
 - Authentication handled by `AuthService`
 
-### 👤 Users & Profile
+### 👤 USERS & PROFILE
 - User listing via `UsersController`
 - Personal profile page via `ProfileController`
 
-### 🎥 Movies
+### 🎥 MOVIES
 - Full CRUD
 - `IsUpcoming` flag — separates **Now Showing** from **Coming Soon**
 - YouTube trailer support via `/watch?v=` (opens in new tab)
 - Seeded via `MovieSeed.cs`
 
-### 🏛️ Cinemas & Halls
+### 🏛️ CINEMAS & HALLS
 - Full CRUD for cinemas and halls
 - Halls scoped to a parent cinema
 - Seeded via `CinemaSeed.cs` and `HallSeed.cs`
 
-### 📅 Screenings
+### 📅 SCREENINGS
 - Full CRUD with movie and hall assignment
 - **Overlap validation** — prevents double-booking a hall for the same time slot
 - "Buy Ticket" links directly into the ticket form with pre-populated `ScreeningId`
 - Seeded via `ScreeningSeed.cs`
 
-### 🎟️ Tickets & Ticket Types
+### 🎟️ TICKETS & TICKET TYPES
 - Full CRUD for tickets and ticket types
 - Ticket types support discount tiers
 - Purchase flow linked from screenings
 - Seeded via `TicketSeed.cs`
 
-### 🏷️ Promotions
+### 🏷️ PROMOTIONS
 - Full CRUD for promotional campaigns
 - Date-range validity (`ValidFrom` / `ValidTo`)
 - Seeded via `PromotionSeed.cs`
 
-### 🏠 Home Page
+### 🏠 HOME PAGE
 - Dynamically loads movies from the database
 - **Now Showing** and **Coming Soon** sections
 
 ---
 
-## 🎨 UI / Frontend
+## 🎨 UI / FRONTEND
 
-### Design Language
+### DESIGN LANGUAGE
 - **Theme:** Cinematic dark — deep blacks, dark grays, red accents (`#8B1A1A`, `#B20000`)
 - **Typography:** Uppercase letter-spacing headings; premium editorial feel
 - **Animations:**
@@ -180,7 +180,7 @@ ApplicationUser (managed via ASP.NET Identity)
 - **Forms:** Floating label inputs, gradient submit buttons
 - **Razor note:** `@keyframes` written as `@@keyframes` to avoid Razor parsing conflicts
 
-### Pages
+### PAGES
 
 | Route | Description |
 |---|---|
@@ -204,7 +204,7 @@ ApplicationUser (managed via ASP.NET Identity)
 
 ---
 
-## 🧩 Design Patterns
+## 🧩 DESIGN PATTERNS
 
 | Pattern | Implementation |
 |---|---|
@@ -215,14 +215,14 @@ ApplicationUser (managed via ASP.NET Identity)
 
 ---
 
-## 🚀 Getting Started
+## 🚀 GETTING STARTED
 
-### Prerequisites
+### PREREQUISITES
 - [.NET 10 SDK](https://dotnet.microsoft.com/download)
 - SQL Server (or SQL Server Express / LocalDB)
 - Visual Studio 2022+ or VS Code
 
-### Setup
+### SETUP
 
 ```bash
 git clone https://github.com/cristianflorincojocaru/cinemawebapp.git
@@ -246,7 +246,7 @@ dotnet run
 
 Navigate to `https://localhost:{port}` to open **The Film Vault**.
 
-### Migration Notes
+### MIGRATION NOTES
 
 If you hit migration conflicts:
 1. Drop all tables including `__EFMigrationsHistory`
@@ -257,7 +257,7 @@ If you hit migration conflicts:
 
 ---
 
-## 🧰 Tech Stack
+## 🧰 TECH STACK
 
 | Layer | Technology |
 |---|---|
