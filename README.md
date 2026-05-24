@@ -13,7 +13,7 @@
 </div>
 
 
-## 📋 OVERVIEW
+## OVERVIEW
 
 **THE FILM VAULT** is a full-stack cinema management and ticket booking system built as an academic project. It supports browsing movies, managing screenings, purchasing tickets, handling promotions, and administering cinema halls — all wrapped in a **cinematic dark-themed UI** with red accents and premium animations.
 
