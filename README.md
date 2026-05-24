@@ -165,7 +165,7 @@ ApplicationUser (managed via ASP.NET Identity)
 
 
 
-## 🎨 UI / FRONTEND
+## UI / FRONTEND
 
 ### DESIGN LANGUAGE
 - **Theme:** Cinematic dark — deep blacks, dark grays, red accents (`#8B1A1A`, `#B20000`)
@@ -201,7 +201,7 @@ ApplicationUser (managed via ASP.NET Identity)
 
 
 
-## 🧩 DESIGN PATTERNS
+## DESIGN PATTERNS
 
 | Pattern | Implementation |
 |---|---|
@@ -212,7 +212,7 @@ ApplicationUser (managed via ASP.NET Identity)
 
 
 
-## 🚀 GETTING STARTED
+## GETTING STARTED
 
 ### PREREQUISITES
 - [.NET 10 SDK](https://dotnet.microsoft.com/download)
@@ -253,7 +253,7 @@ If you hit migration conflicts:
 5. Use `SET IDENTITY_INSERT [Table] ON` if inserting explicit seed IDs manually
 
 
-## 🧰 TECH STACK
+## TECH STACK
 
 | Layer | Technology |
 |---|---|
