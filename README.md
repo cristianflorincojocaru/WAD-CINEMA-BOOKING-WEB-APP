@@ -119,7 +119,6 @@ Cinema ──< Hall ──< Screening >── Movie
 ApplicationUser (managed via ASP.NET Identity)
 ```
 
----
 
 ## FEATURES
 
@@ -164,7 +163,7 @@ ApplicationUser (managed via ASP.NET Identity)
 - Dynamically loads movies from the database
 - **Now Showing** and **Coming Soon** sections
 
----
+
 
 ## 🎨 UI / FRONTEND
 
@@ -200,7 +199,7 @@ ApplicationUser (managed via ASP.NET Identity)
 | `/TicketTypes` | Ticket type management |
 | `/Promotions` | Promotions listing |
 
----
+
 
 ## 🧩 DESIGN PATTERNS
 
@@ -211,7 +210,7 @@ ApplicationUser (managed via ASP.NET Identity)
 | **MVC** | Standard ASP.NET Core MVC with Razor Views |
 | **Seed Data** | Dedicated seed classes in `Data/` per entity |
 
----
+
 
 ## 🚀 GETTING STARTED
 
