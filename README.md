@@ -2,7 +2,7 @@
 
 <div align="center">
 
-# 🎬 CinemaWebApp
+# 🎬 The Film Vault
 
 **A full-stack cinema booking platform built with ASP.NET Core MVC**
 
@@ -18,7 +18,9 @@
 
 ## 📋 Overview
 
-CinemaWebApp is a full-stack cinema management and ticket booking system built as an academic project. It supports browsing movies, managing screenings, purchasing tickets, handling promotions, and administering cinema halls — all wrapped in a **cinematic dark-themed UI** with red accents and premium animations.
+**The Film Vault** is a full-stack cinema management and ticket booking system built as an academic project. It supports browsing movies, managing screenings, purchasing tickets, handling promotions, and administering cinema halls — all wrapped in a **cinematic dark-themed UI** with red accents and premium animations.
+
+The project repository is named `cinemawebapp`.
 
 ---
 
@@ -244,7 +246,7 @@ dotnet ef database update
 dotnet run
 ```
 
-Navigate to `https://localhost:{port}`.
+Navigate to `https://localhost:{port}` to open **The Film Vault**.
 
 ### Migration Notes
 
