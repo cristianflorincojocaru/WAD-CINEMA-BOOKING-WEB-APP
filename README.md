@@ -19,7 +19,7 @@
 
 The project repository is named `cinemawebapp`.
 
----
+
 
 ## ARCHITECTURE
 
@@ -93,7 +93,6 @@ cinemawebapp/
     └── Users/
 ```
 
----
 
 ## DATABASE SCHEMA
 
