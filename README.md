@@ -2,9 +2,7 @@
 
 <div align="center">
 
-# 🎬 The Film Vault
-
-**A full-stack cinema booking platform built with ASP.NET Core MVC**
+**🎬 THE FILM VAULT a full-stack cinema booking platform built with ASP.NET Core MVC**
 
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-MVC-512BD4?style=for-the-badge&logo=dotnet)
 ![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?style=for-the-badge&logo=dotnet)
