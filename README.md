@@ -98,7 +98,7 @@ cinemawebapp/
 
 ### ENTITIES
 
-| Entity | Key Fields |
+| ENTITY | KEY FIELDS |
 |---|---|
 | `ApplicationUser` | `Id`, `UserName`, `Email`, `PasswordHash` |
 | `Cinema` | `Id`, `Name`, `Location` |
