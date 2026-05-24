@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "h9cHZyiRq7I=",
+  "dgSpecHash": "LFyCDEuoDkM=",
   "success": true,
-  "projectFilePath": "D:\\Projects\\webapplicationdesign\\cinemawebapp\\cinemawebapp.csproj",
+  "projectFilePath": "D:\\Projects\\WAD-CINEMA-BOOKING-WEB-APP\\webapplicationdesign\\cinemawebapp\\cinemawebapp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\crist\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\crist\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",

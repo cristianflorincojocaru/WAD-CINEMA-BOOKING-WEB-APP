@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿
 using System.ComponentModel.DataAnnotations;
 
 namespace cinemawebapp.Models
@@ -37,6 +37,6 @@ namespace cinemawebapp.Models
         public string CustomerName { get; set; } = string.Empty;
 
         public string? UserId { get; set; }
-        public IdentityUser? User { get; set; }
+        public ApplicationUser? User { get; set; }
     }
 }

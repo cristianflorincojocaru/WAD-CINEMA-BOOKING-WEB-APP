@@ -1,3 +1,4 @@
+using cinemawebapp.Models;
 using cinemawebapp.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -8,29 +9,24 @@ namespace cinemawebapp.Controllers
     [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITicketService _ticketService;
 
-        public UsersController(UserManager<IdentityUser> userManager, ITicketService ticketService)
+        public UsersController(UserManager<ApplicationUser> um, ITicketService ts)
         {
-            _userManager = userManager;
-            _ticketService = ticketService;
+            _userManager = um; _ticketService = ts;
         }
 
-        public IActionResult Index()
-        {
-            var users = _userManager.Users.ToList();
-            return View(users);
-        }
+        public IActionResult Index() => View(_userManager.Users.ToList());
 
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
             if (user == null) return NotFound();
-
             await _ticketService.DeleteByUserIdAsync(id);
             await _userManager.DeleteAsync(user);
+            TempData["ToastSuccess"] = "User deleted.";
             return RedirectToAction(nameof(Index));
         }
     }

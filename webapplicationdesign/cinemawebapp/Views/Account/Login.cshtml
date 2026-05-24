@@ -1,0 +1,182 @@
+﻿@model cinemawebapp.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+@section Styles {
+    <style>
+        .auth-wrap {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-card {
+            background: #0f0f0f;
+            border: 1px solid #1e1e1e;
+            border-radius: 12px;
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .auth-title {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .auth-sub {
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #555;
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .auth-field {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+            .auth-field input {
+                width: 100%;
+                background: #141414;
+                border: 1px solid #2a2a2a;
+                border-radius: 6px;
+                color: white;
+                padding: 20px 14px 8px;
+                font-size: 14px;
+                font-family: inherit;
+                outline: none;
+                transition: border-color 0.2s;
+            }
+
+                .auth-field input:focus {
+                    border-color: #8B1A1A;
+                }
+
+            .auth-field label {
+                position: absolute;
+                left: 14px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 10px;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+                color: #555;
+                transition: all 0.2s;
+                pointer-events: none;
+            }
+
+            .auth-field input:focus ~ label,
+            .auth-field input:not(:placeholder-shown) ~ label {
+                top: 10px;
+                transform: none;
+                font-size: 9px;
+                color: #8B1A1A;
+            }
+
+        .auth-btn {
+            width: 100%;
+            padding: 14px;
+            background: #8B1A1A;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.2s;
+            margin-top: 8px;
+        }
+
+            .auth-btn:hover {
+                background: #B20000;
+            }
+
+        .auth-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: #555;
+        }
+
+            .auth-link a {
+                color: #8B1A1A;
+                text-decoration: none;
+            }
+
+                .auth-link a:hover {
+                    color: white;
+                }
+
+        .auth-errors {
+            margin-bottom: 16px;
+        }
+
+            .auth-errors span {
+                font-size: 11px;
+                letter-spacing: 1px;
+                color: #ff4444;
+            }
+
+        .remember-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: #555;
+        }
+
+            .remember-row input[type=checkbox] {
+                accent-color: #8B1A1A;
+            }
+    </style>
+}
+
+<div class="auth-wrap">
+    <div class="auth-card">
+        <div class="auth-title">Login</div>
+        <div class="auth-sub">Welcome back</div>
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="auth-errors">
+                @Html.ValidationSummary(true, "", new { @class = "" })
+            </div>
+        }
+
+        <form asp-action="Login" method="post">
+            @Html.AntiForgeryToken()
+            <div class="auth-field">
+                <input asp-for="Email" type="email" placeholder=" " autocomplete="email" />
+                <label asp-for="Email">Email</label>
+            </div>
+            <div class="auth-field">
+                <input asp-for="Password" type="password" placeholder=" " autocomplete="current-password" />
+                <label asp-for="Password">Password</label>
+            </div>
+            <div class="remember-row">
+                <input asp-for="RememberMe" type="checkbox" id="rem" />
+                <label for="rem">Remember me</label>
+            </div>
+            <button type="submit" class="auth-btn">— Sign In</button>
+        </form>
+
+        <div class="auth-link">
+            Don't have an account? <a asp-controller="Account" asp-action="Register">Register</a>
+        </div>
+    </div>
+</div>

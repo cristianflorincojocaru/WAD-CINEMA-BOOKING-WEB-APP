@@ -53,6 +53,7 @@ namespace cinemawebapp.Controllers
                 ticket.PurchasedAt = DateTime.UtcNow;
                 ticket.UserId = _userManager.GetUserId(User);
                 await _ticketService.AddAsync(ticket);
+                TempData["ToastSuccess"] = "Ticket created successfully!";
                 return RedirectToAction(nameof(Index));
             }
             ViewBag.Screenings = await GetScreeningSelectItemsAsync(ticket.ScreeningId);
@@ -71,7 +72,12 @@ namespace cinemawebapp.Controllers
         public async Task<IActionResult> Edit(int id, Ticket ticket)
         {
             if (id != ticket.Id) return NotFound();
-            if (ModelState.IsValid) { await _ticketService.UpdateAsync(ticket); return RedirectToAction(nameof(Index)); }
+            if (ModelState.IsValid)
+            {
+                await _ticketService.UpdateAsync(ticket);
+                TempData["ToastSuccess"] = "Ticket updated successfully!";
+                return RedirectToAction(nameof(Index));
+            }
             ViewBag.Screenings = await GetScreeningSelectItemsAsync(ticket.ScreeningId);
             return View(ticket);
         }
@@ -87,6 +93,7 @@ namespace cinemawebapp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _ticketService.DeleteAsync(id);
+            TempData["ToastSuccess"] = "Ticket deleted.";
             return RedirectToAction(nameof(Index));
         }
     }

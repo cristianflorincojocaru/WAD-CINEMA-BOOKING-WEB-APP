@@ -1,66 +1,150 @@
 ﻿@model IEnumerable<cinemawebapp.Models.TicketType>
-@{ ViewData["Title"] = "Ticket Types"; }
+@{
+	ViewData["Title"] = "Ticket Types";
+}
 
 @section Styles {
-<style>
-    .btn-add { position: relative; background: linear-gradient(135deg, #B20000, #8B0000); border: none; color: white; font-weight: 900; letter-spacing: 3px; padding: 8px 22px; font-size: 11px; border-radius: 6px; text-transform: uppercase; text-decoration: none; box-shadow: 0 6px 15px rgba(178,0,0,0.5); transition: all 0.4s ease; display: inline-block; }
-    .btn-add:hover { background: linear-gradient(135deg, #CC0000, #990000); box-shadow: 0 8px 28px rgba(204,0,0,0.7); transform: scale(1.05); color: white; }
-    .action-link { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; font-weight: 700; padding: 4px 12px; border-radius: 4px; border: 1px solid transparent; transition: all 0.25s ease; display: inline-block; }
-    .action-edit { color: #aaa; border-color: #333; }
-    .action-edit:hover { color: white; border-color: #555; background: #1e1e1e; }
-    .action-delete { color: #8B1A1A; border-color: #3a1010; }
-    .action-delete:hover { background: #8B1A1A; color: white; border-color: #8B1A1A; }
-    .row-item { border-bottom: 1px solid #1a1a1a; transition: background-color 0.2s; }
-    .row-item:hover { background-color: #111; }
-    .row-item:last-child { border-bottom: none; }
-    .badge-active { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; font-weight: 700; background-color: #1a2a1a; color: #4caf50; }
-    .badge-inactive { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; font-weight: 700; background-color: #2a1a1a; color: #8B1A1A; }
-</style>
+	<style>
+		.btn-add {
+			position: relative;
+			background: linear-gradient(135deg, #B20000, #8B0000);
+			border: none;
+			color: white;
+			font-weight: 900;
+			letter-spacing: 3px;
+			padding: 8px 22px;
+			font-size: 11px;
+			border-radius: 6px;
+			text-transform: uppercase;
+			text-decoration: none;
+			box-shadow: 0 6px 15px rgba(178,0,0,0.5);
+			transition: all 0.4s ease;
+			display: inline-block;
+		}
+
+			.btn-add:hover {
+				background: linear-gradient(135deg, #CC0000, #990000);
+				box-shadow: 0 8px 28px rgba(204,0,0,0.7);
+				transform: scale(1.05);
+				color: white;
+			}
+
+		.action-link {
+			font-size: 10px;
+			letter-spacing: 2px;
+			text-transform: uppercase;
+			text-decoration: none;
+			font-weight: 700;
+			padding: 4px 12px;
+			border-radius: 4px;
+			border: 1px solid transparent;
+			transition: all 0.25s ease;
+			display: inline-block;
+		}
+
+		.action-edit {
+			color: #aaa;
+			border-color: #333;
+		}
+
+			.action-edit:hover {
+				color: white;
+				border-color: white;
+				background: #1e1e1e;
+			}
+
+		.action-delete {
+			color: #cc2222;
+			border-color: #5a0000;
+			background: transparent;
+		}
+
+			.action-delete:hover {
+				background-color: #8B1A1A !important;
+				color: white !important;
+				border-color: #8B1A1A !important;
+			}
+
+		.row-item {
+			border-bottom: 1px solid #1a1a1a;
+			transition: background-color 0.2s;
+		}
+
+			.row-item:hover {
+				background-color: #111;
+			}
+
+			.row-item:last-child {
+				border-bottom: none;
+			}
+
+		.badge-active {
+			font-size: 9px;
+			letter-spacing: 2px;
+			text-transform: uppercase;
+			padding: 4px 10px;
+			border-radius: 4px;
+			font-weight: 700;
+			background-color: #1a2a1a;
+			color: #4caf50;
+		}
+
+		.badge-inactive {
+			font-size: 9px;
+			letter-spacing: 2px;
+			text-transform: uppercase;
+			padding: 4px 10px;
+			border-radius: 4px;
+			font-weight: 700;
+			background-color: #2a1a1a;
+			color: #8B1A1A;
+		}
+	</style>
 }
 
 <div class="container mt-5 mb-5">
-    <h1 class="mb-2 fw-bold text-uppercase text-center" style="letter-spacing:4px;">Ticket Types</h1>
-    <p class="text-center mb-4" style="color:#aaa; font-size:12px; letter-spacing:3px; text-transform:uppercase;">Admin — Manage Ticket Types</p>
+	<h1 class="mb-2 fw-bold text-uppercase text-center" style="letter-spacing:4px;">Ticket Types</h1>
+	<p class="text-center mb-4" style="color:#aaa; font-size:12px; letter-spacing:3px; text-transform:uppercase;">Admin — Manage Ticket Types</p>
 
-    <div class="text-end mb-3">
-        <a href="/TicketTypes/Create" class="btn-add">+ Add Type</a>
-    </div>
+	<div class="text-end mb-3">
+		<a href="/TicketTypes/Create" class="btn-add">+ Add Type</a>
+	</div>
 
-    <div style="background-color:#0f0f0f; border-radius:12px; border:1px solid #1e1e1e; overflow:hidden;">
-        <table style="width:100%; border-collapse:collapse;">
-            <thead>
-                <tr style="border-bottom:1px solid #8B1A1A;">
-                    <th style="padding:14px 20px; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#8B1A1A;">Name</th>
-                    <th style="padding:14px 20px; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#8B1A1A;">Price</th>
-                    <th style="padding:14px 20px; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#8B1A1A;">Seats</th>
-                    <th style="padding:14px 20px; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#8B1A1A;">Day</th>
-                    <th style="padding:14px 20px; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#8B1A1A;">Status</th>
-                    <th style="padding:14px 20px; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#8B1A1A;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var t in Model)
-                {
-                    <tr class="row-item">
-                        <td style="padding:14px 20px; color:white; font-weight:bold; font-size:13px;">@t.Emoji @t.Name</td>
-                        <td style="padding:14px 20px; color:#aaa; font-size:13px;">@t.Price RON</td>
-                        <td style="padding:14px 20px; color:#aaa; font-size:13px;">@t.MinSeats – @t.MaxSeats</td>
-                        <td style="padding:14px 20px; color:#aaa; font-size:13px;">@(t.DayRestriction ?? "—")</td>
-                        <td style="padding:14px 20px;">
-                            <span class="@(t.IsActive ? "badge-active" : "badge-inactive")">@(t.IsActive ? "Active" : "Inactive")</span>
-                        </td>
-                        <td style="padding:14px 20px;">
-                            <div class="d-flex gap-2">
-                                <a href="/TicketTypes/Edit/@t.Id" class="action-link action-edit">Edit</a>
-                                <form asp-action="Delete" asp-route-id="@t.Id" method="post" style="display:inline;">
-                                    @Html.AntiForgeryToken()
-                                    <button type="submit" class="action-link action-delete" style="background:transparent; cursor:pointer; font-family:inherit;">Delete</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+	<div style="background-color:#0f0f0f; border-radius:12px; border:1px solid #1e1e1e; overflow:hidden;">
+		<table style="width:100%; border-collapse:collapse;">
+			<thead>
+				<tr style="border-bottom:1px solid #8B1A1A;">
+					<th style="padding:14px 20px; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#8B1A1A;">Name</th>
+					<th style="padding:14px 20px; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#8B1A1A;">Price</th>
+					<th style="padding:14px 20px; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#8B1A1A;">Seats</th>
+					<th style="padding:14px 20px; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#8B1A1A;">Day</th>
+					<th style="padding:14px 20px; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#8B1A1A;">Status</th>
+					<th style="padding:14px 20px; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#8B1A1A;">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var t in Model)
+				{
+					<tr class="row-item">
+						<td style="padding:14px 20px; color:white; font-weight:bold; font-size:13px;">@t.Emoji @t.Name</td>
+						<td style="padding:14px 20px; color:#aaa; font-size:13px;">@t.Price RON</td>
+						<td style="padding:14px 20px; color:#aaa; font-size:13px;">@t.MinSeats – @t.MaxSeats</td>
+						<td style="padding:14px 20px; color:#aaa; font-size:13px;">@(t.DayRestriction ?? "—")</td>
+						<td style="padding:14px 20px;">
+							<span class="@(t.IsActive ? "badge-active" : "badge-inactive")">@(t.IsActive ? "Active" : "Inactive")</span>
+						</td>
+						<td style="padding:14px 20px;">
+							<div class="d-flex gap-2">
+								<a href="/TicketTypes/Edit/@t.Id" class="action-link action-edit">Edit</a>
+								<form asp-action="Delete" asp-route-id="@t.Id" method="post" style="display:inline;">
+									@Html.AntiForgeryToken()
+									<button type="submit" class="action-link action-delete" style="cursor:pointer; font-family:inherit;">Delete</button>
+								</form>
+							</div>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
 </div>

@@ -35,7 +35,7 @@ namespace cinemawebapp.Models
         [Display(Name = "Is Active")]
         public bool IsActive { get; set; } = true;
 
-        // 🔥 Validare custom
+        // Validare custom
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (MinSeats > MaxSeats)

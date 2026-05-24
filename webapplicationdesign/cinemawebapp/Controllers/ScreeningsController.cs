@@ -39,10 +39,18 @@ namespace cinemawebapp.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Screening screening)
         {
+            ModelState.Remove("Movie");
+            ModelState.Remove("Hall");
+            ModelState.Remove("Tickets");
+
             if (ModelState.IsValid)
             {
                 var error = await _screeningService.CreateAsync(screening);
-                if (error == null) return RedirectToAction(nameof(Index));
+                if (error == null)
+                {
+                    TempData["ToastSuccess"] = "Screening created successfully!";
+                    return RedirectToAction(nameof(Index));
+                }
                 ModelState.AddModelError("", error);
             }
             ViewBag.Movies = new SelectList(await _movieService.GetAllAsync(), "Id", "Title", screening.MovieId);
@@ -63,10 +71,19 @@ namespace cinemawebapp.Controllers
         public async Task<IActionResult> Edit(int id, Screening screening)
         {
             if (id != screening.Id) return NotFound();
+
+            ModelState.Remove("Movie");
+            ModelState.Remove("Hall");
+            ModelState.Remove("Tickets");
+
             if (ModelState.IsValid)
             {
                 var error = await _screeningService.UpdateAsync(screening);
-                if (error == null) return RedirectToAction(nameof(Index));
+                if (error == null)
+                {
+                    TempData["ToastSuccess"] = "Screening updated successfully!";
+                    return RedirectToAction(nameof(Index));
+                }
                 ModelState.AddModelError("", error);
             }
             ViewBag.Movies = new SelectList(await _movieService.GetAllAsync(), "Id", "Title", screening.MovieId);
@@ -85,6 +102,7 @@ namespace cinemawebapp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _screeningService.DeleteAsync(id);
+            TempData["ToastSuccess"] = "Screening deleted.";
             return RedirectToAction(nameof(Index));
         }
     }

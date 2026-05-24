@@ -33,7 +33,12 @@ namespace cinemawebapp.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Hall hall)
         {
-            if (ModelState.IsValid) { await _hallService.AddAsync(hall); return RedirectToAction(nameof(Index)); }
+            if (ModelState.IsValid)
+            {
+                await _hallService.AddAsync(hall);
+                TempData["ToastSuccess"] = "Hall added successfully!";
+                return RedirectToAction(nameof(Index));
+            }
             ViewBag.Cinemas = new SelectList(await _cinemaService.GetAllAsync(), "Id", "Name", hall.CinemaId);
             return View(hall);
         }
@@ -50,7 +55,12 @@ namespace cinemawebapp.Controllers
         public async Task<IActionResult> Edit(int id, Hall hall)
         {
             if (id != hall.Id) return NotFound();
-            if (ModelState.IsValid) { await _hallService.UpdateAsync(hall); return RedirectToAction(nameof(Index)); }
+            if (ModelState.IsValid)
+            {
+                await _hallService.UpdateAsync(hall);
+                TempData["ToastSuccess"] = "Hall updated successfully!";
+                return RedirectToAction(nameof(Index));
+            }
             ViewBag.Cinemas = new SelectList(await _cinemaService.GetAllAsync(), "Id", "Name", hall.CinemaId);
             return View(hall);
         }
@@ -66,6 +76,7 @@ namespace cinemawebapp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _hallService.DeleteAsync(id);
+            TempData["ToastSuccess"] = "Hall deleted.";
             return RedirectToAction(nameof(Index));
         }
     }

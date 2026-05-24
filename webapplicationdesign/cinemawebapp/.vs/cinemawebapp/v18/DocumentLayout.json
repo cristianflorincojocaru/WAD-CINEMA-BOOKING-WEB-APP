@@ -1,38 +1,14 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Projects\\webapplicationdesign\\cinemawebapp\\",
+  "WorkspaceRootPath": "D:\\Projects\\WAD-CINEMA-BOOKING-WEB-APP\\webapplicationdesign\\cinemawebapp\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|d:\\projects\\webapplicationdesign\\cinemawebapp\\models\\tickettype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|solutionrelative:models\\tickettype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|d:\\projects\\wad-cinema-booking-web-app\\webapplicationdesign\\cinemawebapp\\views\\home\\moviedetails.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|solutionrelative:views\\home\\moviedetails.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|d:\\projects\\webapplicationdesign\\cinemawebapp\\models\\promotion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|solutionrelative:models\\promotion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|d:\\projects\\webapplicationdesign\\cinemawebapp\\controllers\\ticketscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|solutionrelative:controllers\\ticketscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|d:\\projects\\webapplicationdesign\\cinemawebapp\\models\\cinema.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|solutionrelative:models\\cinema.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|d:\\projects\\webapplicationdesign\\cinemawebapp\\models\\hall.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|solutionrelative:models\\hall.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|d:\\projects\\webapplicationdesign\\cinemawebapp\\models\\movie.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|solutionrelative:models\\movie.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|d:\\projects\\webapplicationdesign\\cinemawebapp\\models\\screening.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|solutionrelative:models\\screening.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|d:\\projects\\webapplicationdesign\\cinemawebapp\\models\\ticket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|solutionrelative:models\\ticket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|d:\\projects\\wad-cinema-booking-web-app\\webapplicationdesign\\cinemawebapp\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{DF194AD8-2C4B-2664-CA90-48A6758D1A3F}|cinemawebapp.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,104 +18,33 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "TicketType.cs",
-              "DocumentMoniker": "D:\\Projects\\webapplicationdesign\\cinemawebapp\\Models\\TicketType.cs",
-              "RelativeDocumentMoniker": "Models\\TicketType.cs",
-              "ToolTip": "D:\\Projects\\webapplicationdesign\\cinemawebapp\\Models\\TicketType.cs",
-              "RelativeToolTip": "Models\\TicketType.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAAADEAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-25T21:36:30.946Z",
+              "DocumentIndex": 1,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "D:\\Projects\\WAD-CINEMA-BOOKING-WEB-APP\\webapplicationdesign\\cinemawebapp\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "D:\\Projects\\WAD-CINEMA-BOOKING-WEB-APP\\webapplicationdesign\\cinemawebapp\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAACcCAAAAAAAAAAAQwD4CAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-24T19:10:46.262Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Promotion.cs",
-              "DocumentMoniker": "D:\\Projects\\webapplicationdesign\\cinemawebapp\\Models\\Promotion.cs",
-              "RelativeDocumentMoniker": "Models\\Promotion.cs",
-              "ToolTip": "D:\\Projects\\webapplicationdesign\\cinemawebapp\\Models\\Promotion.cs",
-              "RelativeToolTip": "Models\\Promotion.cs",
-              "ViewState": "AgIAAAQAAAAAAAAAAAAwwBEAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-25T21:36:06.815Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Ticket.cs",
-              "DocumentMoniker": "D:\\Projects\\webapplicationdesign\\cinemawebapp\\Models\\Ticket.cs",
-              "RelativeDocumentMoniker": "Models\\Ticket.cs",
-              "ToolTip": "D:\\Projects\\webapplicationdesign\\cinemawebapp\\Models\\Ticket.cs",
-              "RelativeToolTip": "Models\\Ticket.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAiwCkAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-25T21:36:16.547Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Screening.cs",
-              "DocumentMoniker": "D:\\Projects\\webapplicationdesign\\cinemawebapp\\Models\\Screening.cs",
-              "RelativeDocumentMoniker": "Models\\Screening.cs",
-              "ToolTip": "D:\\Projects\\webapplicationdesign\\cinemawebapp\\Models\\Screening.cs",
-              "RelativeToolTip": "Models\\Screening.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-25T21:36:07.043Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Movie.cs",
-              "DocumentMoniker": "D:\\Projects\\webapplicationdesign\\cinemawebapp\\Models\\Movie.cs",
-              "RelativeDocumentMoniker": "Models\\Movie.cs",
-              "ToolTip": "D:\\Projects\\webapplicationdesign\\cinemawebapp\\Models\\Movie.cs",
-              "RelativeToolTip": "Models\\Movie.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAcwB0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-25T21:35:58.647Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Hall.cs",
-              "DocumentMoniker": "D:\\Projects\\webapplicationdesign\\cinemawebapp\\Models\\Hall.cs",
-              "RelativeDocumentMoniker": "Models\\Hall.cs",
-              "ToolTip": "D:\\Projects\\webapplicationdesign\\cinemawebapp\\Models\\Hall.cs",
-              "RelativeToolTip": "Models\\Hall.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAA4AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-25T21:35:49.981Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Cinema.cs",
-              "DocumentMoniker": "D:\\Projects\\webapplicationdesign\\cinemawebapp\\Models\\Cinema.cs",
-              "RelativeDocumentMoniker": "Models\\Cinema.cs",
-              "ToolTip": "D:\\Projects\\webapplicationdesign\\cinemawebapp\\Models\\Cinema.cs",
-              "RelativeToolTip": "Models\\Cinema.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAcwCIAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-25T21:35:39.269Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "TicketsController.cs",
-              "DocumentMoniker": "D:\\Projects\\webapplicationdesign\\cinemawebapp\\Controllers\\TicketsController.cs",
-              "RelativeDocumentMoniker": "Controllers\\TicketsController.cs",
-              "ToolTip": "D:\\Projects\\webapplicationdesign\\cinemawebapp\\Controllers\\TicketsController.cs",
-              "RelativeToolTip": "Controllers\\TicketsController.cs",
-              "ViewState": "AgIAADoAAAAAAAAAAAAcwFwAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-25T21:24:35.793Z"
+              "DocumentIndex": 0,
+              "Title": "MovieDetails.cshtml",
+              "DocumentMoniker": "D:\\Projects\\WAD-CINEMA-BOOKING-WEB-APP\\webapplicationdesign\\cinemawebapp\\Views\\Home\\MovieDetails.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\MovieDetails.cshtml",
+              "ToolTip": "D:\\Projects\\WAD-CINEMA-BOOKING-WEB-APP\\webapplicationdesign\\cinemawebapp\\Views\\Home\\MovieDetails.cshtml",
+              "RelativeToolTip": "Views\\Home\\MovieDetails.cshtml",
+              "ViewState": "AgIAAL8AAAAAAAAAAAAQwOgAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-24T19:02:19.877Z",
+              "EditorCaption": ""
             }
           ]
         }

@@ -1,0 +1,152 @@
+﻿@{
+    ViewData["Title"] = "Error";
+    var code = ViewBag.Code != null ? (int)ViewBag.Code : 404;
+
+    var title = code switch
+    {
+        404 => "Scene Not Found",
+        403 => "Access Denied",
+        500 => "Projection Error",
+        _ => "Something Went Wrong"
+    };
+    var desc = code switch
+    {
+        404 => "The page you're looking for doesn't exist or has been moved.",
+        403 => "You don't have permission to view this page.",
+        500 => "Something went wrong on our end. Try again later.",
+        _ => "An unexpected error occurred."
+    };
+}
+
+@section Styles {
+    <style>
+        .error-page {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 60px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .error-code {
+            font-size: 160px;
+            font-weight: 900;
+            letter-spacing: 10px;
+            line-height: 1;
+            background: linear-gradient(135deg, #1a1a1a 0%, #3a0000 50%, #1a1a1a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            user-select: none;
+        }
+
+            .error-code::after {
+                content: '@code';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(135deg, #B20000, #ff4444);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                opacity: 0.15;
+                filter: blur(18px);
+                transform: translateY(8px);
+            }
+
+        .error-divider {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #B20000, transparent);
+            margin: 24px auto;
+        }
+
+        .error-title {
+            font-size: 13px;
+            font-weight: 900;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .error-desc {
+            font-size: 12px;
+            color: #555;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+        }
+
+        .error-btn {
+            position: relative;
+            display: inline-block;
+            padding: 13px 36px;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 6px;
+            border: 1px solid #2a2a2a;
+            color: #666;
+            background: #0a0a0a;
+            overflow: hidden;
+            transition: color 0.35s ease, border-color 0.35s ease;
+        }
+
+            .error-btn::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(135deg, #B20000, #7a0000);
+                transform: translateX(-101%);
+                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 0;
+            }
+
+            .error-btn span {
+                position: relative;
+                z-index: 1;
+            }
+
+            .error-btn:hover {
+                color: white;
+                border-color: #B20000;
+            }
+
+                .error-btn:hover::before {
+                    transform: translateX(0);
+                }
+
+        /* background film grain effect */
+        .error-page::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            opacity: 0.4;
+            z-index: 0;
+        }
+
+        .error-content {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+}
+
+<div class="error-page">
+    <div class="error-content">
+        <div class="error-code">@code</div>
+        <div class="error-divider"></div>
+        <div class="error-title">@title</div>
+        <div class="error-desc">@desc</div>
+        <a href="/" class="error-btn"><span>← Back to Home</span></a>
+    </div>
+</div>

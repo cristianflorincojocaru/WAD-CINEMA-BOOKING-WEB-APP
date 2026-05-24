@@ -22,11 +22,11 @@
                 {
                     <tr style="border-bottom:1px solid #1a1a1a;">
                         <td style="padding:14px 20px; color:white; font-size:13px;">@user.Email</td>
-                        <td style="padding:14px 20px; color:#555; font-size:11px;">@user.Id</td>
+                        <td style="padding:14px 20px; color:#aaa; font-size:13px;">@user.Id</td>
                         <td style="padding:14px 20px;">
                             <form asp-action="Delete" asp-route-id="@user.Id" method="post">
                                 @Html.AntiForgeryToken()
-                                <button type="submit" style="font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:4px 12px; border-radius:4px; border:1px solid #3a1010; color:#8B1A1A; background:transparent; cursor:pointer; transition:all 0.25s ease;"
+                                <button type="submit" style="font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:4px 12px; border-radius:4px; border:1px solid #5a0000; color:#cc2222; background:transparent; cursor:pointer; transition:all 0.25s ease;"
                                         onmouseover="this.style.background='#8B1A1A';this.style.color='white';"
                                         onmouseout="this.style.background='transparent';this.style.color='#8B1A1A';">
                                     Delete

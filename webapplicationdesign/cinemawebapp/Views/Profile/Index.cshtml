@@ -1,0 +1,272 @@
+﻿@model cinemawebapp.Models.ApplicationUser
+@using cinemawebapp.Models
+@{
+    ViewData["Title"] = "My Profile";
+    var tickets = ViewBag.Tickets as List<Ticket> ?? new List<Ticket>();
+}
+
+@section Styles {
+    <style>
+        .profile-card {
+            background: #0f0f0f;
+            border: 1px solid #1e1e1e;
+            border-radius: 12px;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .profile-card-header {
+            background: #141414;
+            border-bottom: 1px solid #2a2a2a;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-card-header-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #8B1A1A;
+            flex-shrink: 0;
+        }
+
+        .profile-card-header-title {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #ccc;
+        }
+
+        .profile-card-body {
+            padding: 28px;
+        }
+
+        .profile-divider {
+            border: none;
+            border-top: 1px solid #1e1e1e;
+            margin: 20px 0;
+        }
+
+        .profile-label {
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #aaa;
+            margin-bottom: 4px;
+        }
+
+        .profile-value {
+            font-size: 14px;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #8B1A1A;
+        }
+
+        .avatar-placeholder {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            background: #1a1a1a;
+            border: 2px solid #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #555;
+            flex-shrink: 0;
+        }
+
+        .upload-btn {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 9px 18px;
+            border-radius: 6px;
+            border: 2px solid #555;
+            color: #aaa;
+            background: transparent;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+            .upload-btn:hover {
+                border-color: #8B1A1A;
+                color: white;
+                background: rgba(139,26,26,0.12);
+            }
+
+            .upload-btn:active {
+                background: #8B1A1A;
+                color: white;
+                border-color: #8B1A1A;
+                transform: scale(0.97);
+            }
+
+        .logout-btn {
+            width: 100%;
+            padding: 13px;
+            background: transparent;
+            border: 2px solid #555;
+            border-radius: 6px;
+            color: #aaa;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+            .logout-btn:hover {
+                border-color: #8B1A1A;
+                color: white;
+                background: rgba(139,26,26,0.12);
+            }
+
+            .logout-btn:active {
+                background: #8B1A1A;
+                color: white;
+                border-color: #8B1A1A;
+                transform: scale(0.98);
+            }
+
+        .no-tickets {
+            text-align: center;
+            padding: 40px 0;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #aaa;
+        }
+
+            .no-tickets a {
+                color: #8B1A1A;
+                text-decoration: none;
+                font-weight: 700;
+            }
+
+                .no-tickets a:hover {
+                    color: white;
+                }
+
+        .ticket-row {
+            padding: 14px 0;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .ticket-row:last-child {
+                border-bottom: none;
+            }
+    </style>
+}
+
+<div class="container mt-5 mb-5">
+    <h1 class="text-center fw-bold text-uppercase mb-1" style="letter-spacing:6px;">My Profile</h1>
+    <p class="text-center mb-5" style="color:#aaa; font-size:11px; letter-spacing:3px; text-transform:uppercase;">Account Overview</p>
+
+    <div class="row g-4">
+        <!-- LEFT -->
+        <div class="col-md-4 d-flex flex-column gap-4">
+
+            <!-- Card: Profile Picture -->
+            <div class="profile-card">
+                <div class="profile-card-header">
+                    <div class="profile-card-header-dot"></div>
+                    <div class="profile-card-header-title">Profile Picture</div>
+                </div>
+                <div class="profile-card-body">
+                    <div class="d-flex align-items-center gap-3">
+                        @if (!string.IsNullOrEmpty(Model.ProfilePicturePath))
+                        {
+                            <img src="@Model.ProfilePicturePath" class="profile-avatar" alt="Avatar" />
+                        }
+                        else
+                        {
+                            <div class="avatar-placeholder">👤</div>
+                        }
+                        <form asp-controller="Account" asp-action="UploadProfilePicture" method="post" enctype="multipart/form-data">
+                            @Html.AntiForgeryToken()
+                            <input type="file" name="file" id="picFile" accept="image/*" style="display:none;" onchange="this.form.submit()" />
+                            <label for="picFile" class="upload-btn">↑ Upload</label>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card: User Information -->
+            <div class="profile-card">
+                <div class="profile-card-header">
+                    <div class="profile-card-header-dot"></div>
+                    <div class="profile-card-header-title">User Information</div>
+                </div>
+                <div class="profile-card-body">
+                    <div class="profile-label">Username</div>
+                    <div class="profile-value">@Model.UserName</div>
+                    <div class="profile-label">Email</div>
+                    <div class="profile-value">@Model.Email</div>
+                    <div class="profile-label">Tickets Purchased</div>
+                    <div class="profile-value">@tickets.Count</div>
+                    <hr class="profile-divider" />
+                    <form asp-controller="Account" asp-action="Logout" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="logout-btn">
+                            <span style="font-size:14px;">←</span> Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="col-md-8">
+            <div class="profile-card">
+                <div class="profile-card-header">
+                    <div class="profile-card-header-dot"></div>
+                    <div class="profile-card-header-title">Ticket History</div>
+                </div>
+                <div class="profile-card-body">
+                    @if (!tickets.Any())
+                    {
+                        <div class="no-tickets">
+                            No tickets purchased yet — <a href="/Home/Program">Browse Screenings →</a>
+                        </div>
+                    }
+                    else
+                    {
+                        @foreach (var t in tickets)
+                        {
+                            <div class="ticket-row">
+                                <div>
+                                    <div style="font-size:12px; color:white; letter-spacing:1px;">Screening #@t.ScreeningId</div>
+                                    <div style="font-size:10px; color:#555; letter-spacing:2px; text-transform:uppercase;">Seat @t.SeatNumber</div>
+                                </div>
+                                <div style="color:#8B1A1A; font-size:13px; font-weight:700;">@t.Price.ToString("F2") RON</div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

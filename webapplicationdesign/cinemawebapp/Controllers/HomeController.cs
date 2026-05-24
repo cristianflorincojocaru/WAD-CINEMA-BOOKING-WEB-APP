@@ -14,23 +14,17 @@ namespace cinemawebapp.Controllers
         private readonly ITicketService _ticketService;
         private readonly IPromotionService _promotionService;
         private readonly ITicketTypeService _ticketTypeService;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public HomeController(
-            IMovieService movieService,
-            ICinemaService cinemaService,
-            IScreeningService screeningService,
-            ITicketService ticketService,
-            IPromotionService promotionService,
-            ITicketTypeService ticketTypeService,
-            UserManager<IdentityUser> userManager)
+            IMovieService movieService, ICinemaService cinemaService,
+            IScreeningService screeningService, ITicketService ticketService,
+            IPromotionService promotionService, ITicketTypeService ticketTypeService,
+            UserManager<ApplicationUser> userManager)
         {
-            _movieService = movieService;
-            _cinemaService = cinemaService;
-            _screeningService = screeningService;
-            _ticketService = ticketService;
-            _promotionService = promotionService;
-            _ticketTypeService = ticketTypeService;
+            _movieService = movieService; _cinemaService = cinemaService;
+            _screeningService = screeningService; _ticketService = ticketService;
+            _promotionService = promotionService; _ticketTypeService = ticketTypeService;
             _userManager = userManager;
         }
 
@@ -44,11 +38,7 @@ namespace cinemawebapp.Controllers
             return View(nowShowing);
         }
 
-        public async Task<IActionResult> Movies()
-        {
-            var movies = await _movieService.GetNowShowingAsync();
-            return View(movies);
-        }
+        public async Task<IActionResult> Movies() => View(await _movieService.GetNowShowingAsync());
 
         public async Task<IActionResult> MovieDetails(int id)
         {
@@ -65,9 +55,7 @@ namespace cinemawebapp.Controllers
             var todayIndex = todayDow == 0 ? 6 : todayDow - 1;
             var selectedDay = day ?? dayNames[todayIndex];
             var dayIndex = Array.IndexOf(dayNames, selectedDay.ToUpper());
-
             var screenings = await _screeningService.GetByDayAsync(dayIndex, cinemaId);
-
             ViewBag.Cinemas = cinemas;
             ViewBag.SelectedCinemaId = cinemaId ?? (cinemas.Any() ? cinemas.First().Id : (int?)null);
             ViewBag.SelectedDay = selectedDay;
@@ -80,9 +68,7 @@ namespace cinemawebapp.Controllers
         {
             var screening = await _screeningService.GetByIdWithDetailsAsync(screeningId);
             if (screening == null) return NotFound();
-
-            var takenSeats = await _ticketService.GetTakenSeatsByScreeningAsync(screeningId);
-            ViewBag.TakenSeats = takenSeats;
+            ViewBag.TakenSeats = await _ticketService.GetTakenSeatsByScreeningAsync(screeningId);
             ViewBag.SeatError = TempData["SeatError"];
             return View(screening);
         }
@@ -92,16 +78,15 @@ namespace cinemawebapp.Controllers
         {
             var userId = _userManager.GetUserId(User);
             var customerName = User.Identity!.Name ?? "Unknown";
-
             var error = await _ticketService.BuyTicketAsync(screeningId, seatNumber, ticketType, price, customerName, userId);
             if (error != null)
             {
                 TempData["SeatError"] = error;
+                TempData["ToastError"] = error;
                 return RedirectToAction(nameof(SelectSeat), new { screeningId });
             }
-
-            TempData["Bought"] = $"Seat {seatNumber} confirmed!";
-            return RedirectToAction(nameof(Profile));
+            TempData["ToastSuccess"] = $"Seat {seatNumber} confirmed!";
+            return RedirectToAction("Index", "Profile");
         }
 
         [Authorize]
@@ -113,19 +98,13 @@ namespace cinemawebapp.Controllers
             return View(tickets);
         }
 
-        public async Task<IActionResult> Cinemas()
-        {
-            var cinemas = await _cinemaService.GetAllAsync();
-            return View(cinemas);
-        }
+        public async Task<IActionResult> Cinemas() => View(await _cinemaService.GetAllAsync());
 
         public async Task<IActionResult> Tickets(int? screeningId, string? ticketType)
         {
             var screenings = await _screeningService.GetAllWithDetailsAsync();
-            var takenSeatsMap = await _ticketService.GetTakenSeatsMapAsync();
-
             ViewBag.Cinemas = await _cinemaService.GetAllAsync();
-            ViewBag.TakenSeatsMap = takenSeatsMap;
+            ViewBag.TakenSeatsMap = await _ticketService.GetTakenSeatsMapAsync();
             ViewBag.PreScreeningId = screeningId;
             ViewBag.TicketTypes = await _ticketTypeService.GetActiveAsync();
             ViewBag.PreTicketType = ticketType;
@@ -137,34 +116,21 @@ namespace cinemawebapp.Controllers
         {
             var userId = _userManager.GetUserId(User);
             var customerName = User.Identity!.Name ?? "Unknown";
-
             var screening = await _screeningService.GetByIdAsync(screeningId);
-            var screeningStartTime = screening?.StartTime ?? DateTime.MinValue;
-
-            var error = await _ticketService.BuyMultipleTicketsAsync(screeningId, seatNumbers, ticketType, price, customerName, screeningStartTime, userId);
+            var error = await _ticketService.BuyMultipleTicketsAsync(screeningId, seatNumbers, ticketType, price, customerName, screening?.StartTime ?? DateTime.MinValue, userId);
             if (error != null)
             {
                 TempData["SeatError"] = error;
+                TempData["ToastError"] = error;
                 return RedirectToAction(nameof(Tickets), new { screeningId });
             }
-
-            TempData["Bought"] = "Reservation confirmed!";
-            return RedirectToAction(nameof(Profile));
+            TempData["ToastSuccess"] = "Reservation confirmed!";
+            return RedirectToAction("Index", "Profile");
         }
 
         public IActionResult Tarife() => View();
-
-        public async Task<IActionResult> Upcoming()
-        {
-            var movies = await _movieService.GetUpcomingAsync();
-            return View(movies);
-        }
-
-        public async Task<IActionResult> Promotions()
-        {
-            var promotions = await _promotionService.GetActiveAsync();
-            return View(promotions);
-        }
+        public async Task<IActionResult> Upcoming() => View(await _movieService.GetUpcomingAsync());
+        public async Task<IActionResult> Promotions() => View(await _promotionService.GetActiveAsync());
 
         public async Task<IActionResult> PromoDetails(int id)
         {
@@ -175,13 +141,11 @@ namespace cinemawebapp.Controllers
 
         public IActionResult About() => View();
 
-        [Authorize]
-        public async Task<IActionResult> Profile()
+        public IActionResult Error(int code)
         {
-            var userId = _userManager.GetUserId(User);
-            var tickets = await _ticketService.GetByUserIdAsync(userId!);
-            ViewBag.Bought = TempData["Bought"];
-            return View(tickets);
+            if (code == 0) code = HttpContext.Response.StatusCode;
+            ViewBag.Code = code;
+            return View();
         }
     }
 }

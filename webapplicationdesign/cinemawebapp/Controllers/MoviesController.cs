@@ -23,7 +23,12 @@ namespace cinemawebapp.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Movie movie)
         {
-            if (ModelState.IsValid) { await _movieService.AddAsync(movie); return RedirectToAction(nameof(Index)); }
+            if (ModelState.IsValid)
+            {
+                await _movieService.AddAsync(movie);
+                TempData["ToastSuccess"] = "Movie added successfully!";
+                return RedirectToAction(nameof(Index));
+            }
             return View(movie);
         }
 
@@ -38,7 +43,12 @@ namespace cinemawebapp.Controllers
         public async Task<IActionResult> Edit(int id, Movie movie)
         {
             if (id != movie.Id) return NotFound();
-            if (ModelState.IsValid) { await _movieService.UpdateAsync(movie); return RedirectToAction(nameof(Index)); }
+            if (ModelState.IsValid)
+            {
+                await _movieService.UpdateAsync(movie);
+                TempData["ToastSuccess"] = "Movie updated successfully!";
+                return RedirectToAction(nameof(Index));
+            }
             return View(movie);
         }
 
@@ -53,6 +63,7 @@ namespace cinemawebapp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _movieService.DeleteAsync(id);
+            TempData["ToastSuccess"] = "Movie deleted.";
             return RedirectToAction(nameof(Index));
         }
     }

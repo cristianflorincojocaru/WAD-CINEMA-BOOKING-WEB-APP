@@ -17,8 +17,7 @@
     .detail-item { margin-bottom: 24px; border-bottom: 1px solid #1a1a1a; padding-bottom: 24px; }
     .detail-item:last-of-type { border-bottom: none; }
     .detail-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #8B1A1A; font-weight: 700; margin-bottom: 8px; }
-    .detail-value { font-size: 14px; color: white; letter-spacing: 0.5px; }
-    .detail-value.muted { color: #aaa; }
+    .detail-value { font-size: 14px; color: #aaa; letter-spacing: 0.5px; }
     .btn-edit {
         background: linear-gradient(135deg, #B20000, #8B0000);
         color: white; font-size: 11px; font-weight: 700;
@@ -67,27 +66,27 @@
         </div>
         <div class="detail-item">
             <div class="detail-label">Genre</div>
-            <div class="detail-value muted">@Model.Genre</div>
+            <div class="detail-value">@Model.Genre</div>
         </div>
         <div class="detail-item">
             <div class="detail-label">Duration</div>
-            <div class="detail-value muted">@Model.DurationMinutes minutes</div>
+            <div class="detail-value">@Model.DurationMinutes minutes</div>
         </div>
         <div class="detail-item">
             <div class="detail-label">Age Rating</div>
-            <div class="detail-value muted">@Model.AgeRating</div>
+            <div class="detail-value">@Model.AgeRating</div>
         </div>
         <div class="detail-item">
             <div class="detail-label">Description</div>
-            <div class="detail-value muted">@Html.Raw(Model.Description.Replace(Environment.NewLine, "<br/>"))</div>
+            <div class="detail-value">@Html.Raw(Model.Description.Replace(Environment.NewLine, "<br/>"))</div>
         </div>
         <div class="detail-item">
             <div class="detail-label">Image Path</div>
-            <div class="detail-value muted">@Model.ImagePath</div>
+            <div class="detail-value">@Model.ImagePath</div>
         </div>
         <div class="detail-item">
             <div class="detail-label">Trailer URL</div>
-            <div class="detail-value muted">@Model.TrailerUrl</div>
+            <div class="detail-value">@Model.TrailerUrl</div>
         </div>
         <div class="detail-item">
             <div class="detail-label">Status</div>

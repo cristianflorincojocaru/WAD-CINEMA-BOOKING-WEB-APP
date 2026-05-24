@@ -11,8 +11,19 @@
             border-radius: 10px;
             border: 1px solid #1e1e1e;
             display: block;
+            cursor: zoom-in;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .movie-info-panel { padding-left: 40px; }
+
+            .movie-poster:hover {
+                transform: scale(1.02);
+                box-shadow: 0 12px 40px rgba(0,0,0,0.8);
+            }
+
+        .movie-info-panel {
+            padding-left: 40px;
+        }
+
         .movie-tag {
             display: inline-block;
             font-size: 10px;
@@ -22,6 +33,7 @@
             font-weight: bold;
             margin-bottom: 16px;
         }
+
         .movie-title {
             font-size: 36px;
             font-weight: 700;
@@ -31,6 +43,7 @@
             margin-bottom: 20px;
             line-height: 1.2;
         }
+
         .movie-description {
             font-size: 14px;
             color: #aaa;
@@ -40,6 +53,7 @@
             border-left: 2px solid #8B1A1A;
             padding-left: 20px;
         }
+
         .movie-meta {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -49,27 +63,37 @@
             border-radius: 10px;
             overflow: hidden;
         }
+
         .meta-item {
             padding: 16px 20px;
             border-bottom: 1px solid #1e1e1e;
             border-right: 1px solid #1e1e1e;
         }
-        .meta-item:nth-child(even) { border-right: none; }
-        .meta-item:nth-last-child(-n+2) { border-bottom: none; }
+
+            .meta-item:nth-child(even) {
+                border-right: none;
+            }
+
+            .meta-item:nth-last-child(-n+2) {
+                border-bottom: none;
+            }
+
         .meta-label {
             font-size: 10px;
             letter-spacing: 3px;
             text-transform: uppercase;
-            color: #555;
+            color: #aaa;
             margin-bottom: 6px;
             font-weight: bold;
         }
+
         .meta-value {
             font-size: 13px;
             color: #ccc;
             letter-spacing: 1px;
             font-weight: bold;
         }
+
         .btn-buy-tickets {
             display: inline-block;
             padding: 14px 40px;
@@ -84,13 +108,19 @@
             transition: background-color 0.2s;
             border: none;
         }
-        .btn-buy-tickets:hover { background-color: #6e1414; color: white; }
+
+            .btn-buy-tickets:hover {
+                background-color: #6e1414;
+                color: white;
+            }
+
         .section-divider {
             height: 1px;
             background: linear-gradient(to right, transparent, #2a2a2a, transparent);
             border: none;
             margin: 60px 0 40px 0;
         }
+
         .trailer-label {
             font-size: 10px;
             letter-spacing: 4px;
@@ -100,6 +130,7 @@
             margin-bottom: 16px;
             display: block;
         }
+
         .trailer-title {
             font-size: 20px;
             font-weight: 700;
@@ -108,11 +139,13 @@
             color: white;
             margin-bottom: 24px;
         }
+
         .trailer-wrapper {
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid #1e1e1e;
         }
+
         .no-trailer {
             background-color: #0f0f0f;
             border: 1px solid #1e1e1e;
@@ -124,6 +157,80 @@
             letter-spacing: 3px;
             text-transform: uppercase;
         }
+
+        /* ── POSTER LIGHTBOX ── */
+        #posterLightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.85);
+            align-items: center;
+            justify-content: center;
+            cursor: zoom-out;
+        }
+
+            #posterLightbox.open {
+                display: flex;
+            }
+
+            #posterLightbox img {
+                max-height: 90vh;
+                max-width: 90vw;
+                border-radius: 10px;
+                box-shadow: 0 24px 80px rgba(0, 0, 0, 0.9);
+                animation: zoomIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                cursor: default;
+            }
+
+        #lightboxClose {
+            position: absolute;
+            top: 24px;
+            right: 32px;
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 32px;
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+
+            #lightboxClose:hover {
+                color: white;
+            }
+
+        /* blur pe nav + main + footer cand lightbox e deschis */
+        body.lightbox-open > nav,
+        body.lightbox-open > main,
+        body.lightbox-open > footer {
+            filter: blur(8px);
+            transition: filter 0.3s ease;
+        }
+
+        @@keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.88);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @@keyframes zoomOut {
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            to {
+                opacity: 0;
+                transform: scale(0.88);
+            }
+        }
     </style>
 }
 
@@ -132,7 +239,11 @@
 
         <!-- POSTER -->
         <div class="col-md-4">
-            <img src="@Model.ImagePath" class="movie-poster" alt="@Model.Title">
+            <img src="@Model.ImagePath"
+                 class="movie-poster"
+                 alt="@Model.Title"
+                 id="posterImg"
+                 title="Click to enlarge">
         </div>
 
         <!-- INFO -->
@@ -194,3 +305,35 @@
         <div class="no-trailer">[ Trailer not available ]</div>
     }
 </div>
+
+
+@section Scripts {
+    <script>
+        const poster      = document.getElementById('posterImg');
+        const lightbox    = document.getElementById('posterLightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+
+        poster.addEventListener('click', () => {
+            lightboxImg.src = poster.src;
+            lightbox.classList.add('open');
+            document.body.classList.add('lightbox-open');
+            document.body.style.overflow = 'hidden';
+        });
+
+                function closeLightbox() {
+            lightboxImg.style.animation = 'zoomOut 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+            setTimeout(() => {
+                lightbox.classList.remove('open');
+                lightboxImg.style.animation = '';
+                document.body.classList.remove('lightbox-open');
+                document.body.style.overflow = '';
+            }, 250);
+        }
+
+        lightbox.addEventListener('click', e => {
+            if (e.target !== lightboxImg) closeLightbox();
+        });
+        document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+    </script>
+}
