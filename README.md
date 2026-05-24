@@ -252,7 +252,6 @@ If you hit migration conflicts:
 4. Run `dotnet ef database update`
 5. Use `SET IDENTITY_INSERT [Table] ON` if inserting explicit seed IDs manually
 
----
 
 ## 🧰 TECH STACK
 
