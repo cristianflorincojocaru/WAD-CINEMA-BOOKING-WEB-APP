@@ -272,7 +272,7 @@ If you hit migration conflicts:
 
 ---
 
-## 🤝 CONTRIBUTIONS
+## CONTRIBUTIONS
 
 Project created by **Cristian Florin Cojocaru** *(CSE.3 — University of Craiova / Faculty of Automatics, Computer Science and Electronics)*.
 
@@ -280,6 +280,6 @@ Contributions are welcome! If you have suggestions for improving the code or doc
 
 ---
 
-## 📄 LICENSE
+## LICENSE
 
-This project is licensed under the [MIT License](https://github.com/cristianflorincojocaru/PIC24-PROCESSOR-VHDL-SEMESTER-PROJECT-1/blob/main/LICENSE).
+This project is licensed under the [MIT License]([https://github.com/cristianflorincojocaru/PIC24-PROCESSOR-VHDL-SEMESTER-PROJECT-1/blob/main/LICENSE](https://github.com/cristianflorincojocaru/WAD-CINEMA-BOOKING-WEB-APP/blob/main/LICENSE)).
