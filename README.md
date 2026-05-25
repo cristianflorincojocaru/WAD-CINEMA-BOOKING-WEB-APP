@@ -25,6 +25,14 @@ The project repository is named `cinemawebapp`.
 
 ```
 cinemawebapp/
+├── Areas/
+│   └── Identity/
+│       └── Pages/
+│           └── Account/
+│               ├── ForgotPassword.cshtml
+│               ├── Login.cshtml
+│               ├── Logout.cshtml
+│               └── Register.cshtml
 ├── Controllers/
 │   ├── AccountController.cs
 │   ├── CinemasController.cs
@@ -58,6 +66,13 @@ cinemawebapp/
 │   └── TicketType.cs
 ├── Repositories/
 │   ├── Interfaces/
+│   │   ├── ICinemaRepository.cs
+│   │   ├── IHallRepository.cs
+│   │   ├── IMovieRepository.cs
+│   │   ├── IPromotionRepository.cs
+│   │   ├── IScreeningRepository.cs
+│   │   ├── ITicketRepository.cs
+│   │   └── ITicketTypeRepository.cs
 │   ├── CinemaRepository.cs
 │   ├── HallRepository.cs
 │   ├── MovieRepository.cs
@@ -67,6 +82,14 @@ cinemawebapp/
 │   └── TicketTypeRepository.cs
 ├── Services/
 │   ├── Interfaces/
+│   │   ├── IAuthService.cs
+│   │   ├── ICinemaService.cs
+│   │   ├── IHallService.cs
+│   │   ├── IMovieService.cs
+│   │   ├── IPromotionService.cs
+│   │   ├── IScreeningService.cs
+│   │   ├── ITicketService.cs
+│   │   └── ITicketTypeService.cs
 │   ├── AuthService.cs
 │   ├── CinemaService.cs
 │   ├── HallService.cs
@@ -78,19 +101,82 @@ cinemawebapp/
 ├── ViewModels/
 │   ├── LoginViewModel.cs
 │   └── RegisterViewModel.cs
-└── Views/
-    ├── Account/
-    ├── Cinemas/
-    ├── Halls/
-    ├── Home/
-    ├── Movies/
-    ├── Profile/
-    ├── Promotions/
-    ├── Screenings/
-    ├── Shared/
-    ├── Tickets/
-    ├── TicketTypes/
-    └── Users/
+├── Views/
+│   ├── Account/
+│   │   ├── Login.cshtml
+│   │   └── Register.cshtml
+│   ├── Cinemas/
+│   │   ├── Create.cshtml
+│   │   ├── Delete.cshtml
+│   │   ├── Details.cshtml
+│   │   ├── Edit.cshtml
+│   │   └── Index.cshtml
+│   ├── Halls/
+│   │   ├── Create.cshtml
+│   │   ├── Delete.cshtml
+│   │   ├── Details.cshtml
+│   │   ├── Edit.cshtml
+│   │   └── Index.cshtml
+│   ├── Home/
+│   │   ├── About.cshtml
+│   │   ├── Cinemas.cshtml
+│   │   ├── Index.cshtml
+│   │   ├── MovieDetails.cshtml
+│   │   ├── Movies.cshtml
+│   │   ├── Profile.cshtml
+│   │   ├── Program.cshtml
+│   │   ├── PromoDetails.cshtml
+│   │   ├── Promotions.cshtml
+│   │   ├── Tarife.cshtml
+│   │   ├── Tickets.cshtml
+│   │   └── Upcoming.cshtml
+│   ├── Movies/
+│   │   ├── Create.cshtml
+│   │   ├── Delete.cshtml
+│   │   ├── Details.cshtml
+│   │   ├── Edit.cshtml
+│   │   └── Index.cshtml
+│   ├── Profile/
+│   │   └── Index.cshtml
+│   ├── Promotions/
+│   │   ├── Create.cshtml
+│   │   ├── Delete.cshtml
+│   │   ├── Details.cshtml
+│   │   ├── Edit.cshtml
+│   │   └── Index.cshtml
+│   ├── Screenings/
+│   │   ├── Create.cshtml
+│   │   ├── Delete.cshtml
+│   │   ├── Details.cshtml
+│   │   ├── Edit.cshtml
+│   │   └── Index.cshtml
+│   ├── Shared/
+│   │   ├── _Layout.cshtml
+│   │   ├── _LoginPartial.cshtml
+│   │   └── _ValidationScriptsPartial.cshtml
+│   ├── Tickets/
+│   │   ├── Create.cshtml
+│   │   ├── Delete.cshtml
+│   │   ├── Details.cshtml
+│   │   ├── Edit.cshtml
+│   │   └── Index.cshtml
+│   ├── TicketTypes/
+│   │   ├── Create.cshtml
+│   │   ├── Edit.cshtml
+│   │   └── Index.cshtml
+│   └── Users/
+│       └── Index.cshtml
+├── wwwroot/
+│   ├── css/
+│   │   └── style.css
+│   ├── images/
+│   ├── js/
+│   │   └── site.js
+│   └── uploads/
+│       └── profiles/
+├── appsettings.json
+├── Program.cs
+└── cinemawebapp.csproj
 ```
 
 
