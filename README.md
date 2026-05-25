@@ -201,6 +201,8 @@ cinemawebapp/
 Cinema ──< Hall ──< Screening >── Movie
                        │
                     Ticket >── TicketType
+                       │
+                ApplicationUser
 
 ApplicationUser (managed via ASP.NET Identity)
 ```
