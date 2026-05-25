@@ -191,7 +191,7 @@ cinemawebapp/
 | `Hall` | `Id`, `Name`, `Capacity`, `CinemaId` |
 | `Movie` | `Id`, `Title`, `Genre`, `Duration`, `Description`, `TrailerUrl`, `IsUpcoming` |
 | `Screening` | `Id`, `MovieId`, `HallId`, `StartTime`, `EndTime`, `Price` |
-| `Ticket` | `Id`, `ScreeningId`, `TicketTypeId`, `SeatNumber`, `CustomerName`, `PurchaseDate` |
+| `Ticket` | `Id`, `ScreeningId`, `TicketTypeId`, `UserId`, `SeatNumber`, `CustomerName`, `PurchaseDate` |
 | `TicketType` | `Id`, `Name`, `Discount` |
 | `Promotion` | `Id`, `Title`, `Description`, `ValidFrom`, `ValidTo` |
 
@@ -270,22 +270,53 @@ ApplicationUser (managed via ASP.NET Identity)
 | ROUTE | DESCRIPTION |
 |---|---|
 | `/` | Home — Now Showing + Coming Soon |
+| `/Home/About` | About page |
+| `/Home/Movies` | Public movie listing |
+| `/Home/MovieDetails/{id}` | Public movie detail + trailer |
+| `/Home/Upcoming` | Upcoming movies |
+| `/Home/Cinemas` | Public cinema listing |
+| `/Home/Program` | Screening program |
+| `/Home/Promotions` | Public promotions listing |
+| `/Home/PromoDetails/{id}` | Promotion detail |
+| `/Home/Tarife` | Ticket pricing |
+| `/Home/Tickets` | Public tickets info |
 | `/Account/Login` | Login |
 | `/Account/Register` | Register |
 | `/Profile` | User profile |
 | `/Users` | User management |
-| `/Movies` | Movie listing |
+| `/Movies` | Movie listing (admin) |
 | `/Movies/Details/{id}` | Movie detail + trailer |
 | `/Movies/Create` | Add movie |
 | `/Movies/Edit/{id}` | Edit movie |
+| `/Movies/Delete/{id}` | Delete movie |
 | `/Cinemas` | Cinema listing |
+| `/Cinemas/Details/{id}` | Cinema detail |
+| `/Cinemas/Create` | Add cinema |
+| `/Cinemas/Edit/{id}` | Edit cinema |
+| `/Cinemas/Delete/{id}` | Delete cinema |
 | `/Halls` | Hall listing |
+| `/Halls/Details/{id}` | Hall detail |
+| `/Halls/Create` | Add hall |
+| `/Halls/Edit/{id}` | Edit hall |
+| `/Halls/Delete/{id}` | Delete hall |
 | `/Screenings` | All screenings |
+| `/Screenings/Details/{id}` | Screening detail |
 | `/Screenings/Create` | Schedule screening |
+| `/Screenings/Edit/{id}` | Edit screening |
+| `/Screenings/Delete/{id}` | Delete screening |
 | `/Tickets` | All tickets |
+| `/Tickets/Details/{id}` | Ticket detail |
 | `/Tickets/Create?screeningId={id}` | Buy ticket |
-| `/TicketTypes` | Ticket type management |
+| `/Tickets/Edit/{id}` | Edit ticket |
+| `/Tickets/Delete/{id}` | Delete ticket |
+| `/TicketTypes` | Ticket type listing |
+| `/TicketTypes/Create` | Add ticket type |
+| `/TicketTypes/Edit/{id}` | Edit ticket type |
 | `/Promotions` | Promotions listing |
+| `/Promotions/Details/{id}` | Promotion detail |
+| `/Promotions/Create` | Add promotion |
+| `/Promotions/Edit/{id}` | Edit promotion |
+| `/Promotions/Delete/{id}` | Delete promotion |
 
 
 
